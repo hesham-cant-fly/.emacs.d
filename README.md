@@ -1,5 +1,9 @@
 # .emacs.d
 
+## Source
+- [The Absolute Beginner's Guide to Emacs](https://youtu.be/48JlgiBpw_I?si=dfc2AEbhYuGywuCD)
+- [DT's emacs config from scratch](https://youtu.be/d1fgypEiQkE?si=uD3pvDklPrRtPYSi)
+
 ## Installing
 ### Linux:
 ```bash

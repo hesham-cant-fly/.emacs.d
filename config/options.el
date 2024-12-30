@@ -6,6 +6,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default shell-file-name "/bin/fish")
+(setq-default make-backup-files nil)
 ;; (setq indent-line-function 'insert-line)
 (setq backward-delete-char-untabify-method nil)
 

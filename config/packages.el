@@ -336,6 +336,9 @@
   :diminish
   :hook (company-mode . company-box-mode))
 
+(use-package grip-mode
+  :straight t)
+
 ;; (use-package corfu
 ;;   :straight '(corfu :type git :host github :repo "minad/corfu")
 ;;   :custom
