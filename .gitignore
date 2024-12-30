@@ -1,0 +1,13 @@
+auto-save-list/
+elpa/
+images/
+straight/
+transient/
+url/
+.cache/
+eshell/history
+eshell/lastdir
+.lsp-session-*
+projectile-bookmarks.eld
+recentf
+tramp
