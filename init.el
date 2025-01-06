@@ -12,12 +12,19 @@
 (load "packages")
 (load "buffers")
 (load "options")
-(load "keybindings")
 (load "functions")
 (load "launcher")
 
 (custom-set-variables
-  '(custom-safe-themes
-    '("d445c7b530713eac282ecdeea07a8fa59692c83045bf84dd112dd738c7bcad1d" "4d16802de4686030ed8f30b5a844713d68edec9cc07322bef54493d15e68d8cd" "e27c9668d7eddf75373fa6b07475ae2d6892185f07ebed037eedf783318761d7" default)))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
-(custom-set-faces)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(dashboard-heading ((t (:foreground "cyan" :weight bold :height 0.8)))))

@@ -1,6 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 (straight-use-package 'use-package)
 
+(use-package magit
+  :straight t)
 (use-package diminish
   :straight t)
 (use-package elcord
@@ -8,15 +10,106 @@
   :init (elcord-mode))
 (use-package org
   :straight t
+  :init 
+  (add-hook 'org-mode-hook 'org-indent-mode)
+  (add-hook 'org-mode-hook (lambda () (visual-line-mode t)))
   :config
-  (require 'org-tempo))
+  (require 'org-tempo)
+  (electric-indent-mode -1))
+(use-package toc-org
+  :straight t
+  :after org 
+  :commands toc-org-enable
+  :init (add-hook 'org-mode-hook 'toc-org-enable))
+(use-package org-bullets
+  :straight t
+  :after org
+  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+(use-package rainbow-delimiters
+  :straight t
+  :hook ((
+          emacs-lisp-mode
+          zig-mode
+          ) . rainbow-delimiters-mode))
 (use-package rainbow-mode
   :straight t
   :init (rainbow-mode))
+(use-package tldr
+  :straight t)
+(use-package hl-todo
+  :straight t
+  :hook ((org-mode . hl-todo-mode)
+         (prog-mode . hl-todo-mode))
+  :config
+  (setq hl-todo-highlight-punctuation ":"
+        hl-todo-keyword-faces
+        `(("TODO"       warning bold)
+          ("FIXME"      error bold)
+          ("HACK"       font-lock-constant-face bold)
+          ("REVIEW"     font-lock-keyword-face bold)
+          ("NOTE"       success bold)
+          ("DEPRECATED" font-lock-doc-face bold))))
+
+(use-package doom-modeline
+  :straight t
+  :ensure t
+  :init (doom-modeline-mode t)
+  :config
+  (setq doom-modeline-height 40
+        doom-modeline-bar-width 5
+        doom-modeline-persp-name t
+        doom-modeline-persp-icon t))
+
+;; Dired
+(use-package dired-open 
+  :straight t
+  :config 
+  (setq dired-open-extensions '(("gif" . "sxiv")
+                                ("jpg" . "sxiv")
+                                ("png" . "sxiv")
+                                ("mkv" . "mpv")
+                                ("mp4" . "mpv"))))
+
+(use-package peep-dired
+  :straight t
+  :after dired
+  :hook (evil-normalize-keymaps . peep-dired-hook)
+  :config 
+    (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-find-file instead if not using dired-open package
+    (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
+    (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file))
+
+(use-package neotree
+  :straight t
+  :config
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  (setq neo-smart-open t
+        neo-show-hidden-files t
+        neo-window-width 30
+        neo-window-fixed-size nil
+        inhibit-compacting-font-caches t
+        projectile-switch-project-action 'neotree-projectile-action) 
+  ;; truncate long file names in neotree
+  (add-hook 'neo-after-create-hook
+            #'(lambda (_)
+                (with-current-buffer (get-buffer neo-buffer-name)
+                  (setq truncate-lines t)
+                  (setq word-wrap nil)
+                  (make-local-variable 'auto-hscroll-mode)
+                  (setq auto-hscroll-mode nil)))))
 
 ;; Themes
 (use-package autothemer
   :straight t)
+(use-package doom-themes
+  :straight t
+  :after all-the-icons
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-neotree-config)
+  (doom-themes-org-config))
 (use-package gruvbox-theme
   :straight t)
 (use-package gruber-darker-theme
@@ -40,7 +133,13 @@
   :init
   (setq-default evil-want-keybinding nil)
   :config
-  (evil-mode 1))
+  (evil-mode 1)
+  (with-eval-after-load 'evil-maps
+    (define-key evil-motion-state-map (kbd "SPC") nil)
+    (define-key evil-motion-state-map (kbd "RET") nil)
+    (define-key evil-motion-state-map (kbd "TAB") nil))
+  ;; Setting RETURN key in org-mode to follow links
+  (setq org-return-follows-link  t))
 (use-package evil-collection
   :straight t
   :after evil
@@ -51,6 +150,9 @@
   :straight t)
 
 ; I missed Telescope.. but!
+(use-package counsel-projectile
+  :straight t
+  :after counsel)
 (use-package counsel
   :straight t
   :diminish
@@ -59,6 +161,9 @@
 (use-package swiper
   :after ivy
   :straight t)
+(use-package ivy-rich
+  :straight t
+  :after ivy)
 (use-package ivy
   :straight t
   :diminish
@@ -67,10 +172,13 @@
    ("C-x B" . ivy-switch-buffer-other-window))
   :custom
   (setq ivy-use-virtual-buffers t
-	ivy-count-format "(%d/%d) "
-	enable-recursive-minibuffers t)
+        ivy-count-format "(%d/%d) "
+        enable-recursive-minibuffers t)
   :config
   (ivy-mode))
+(use-package all-the-icons
+  :straight t
+  :if (display-graphic-p))
 (use-package all-the-icons-ivy-rich
   :straight t
   :ensure t
@@ -92,97 +200,11 @@
 (use-package avy
   :straight t)
 
-(use-package general ; Gotta read the docs
+(use-package general
   :straight t
   :config
   (general-evil-setup)
-
-  (general-define-key
-   :states   '(normal visual emacs dashboard)
-   "TAB"     'tab-line-switch-to-next-tab
-   [backtab] 'tab-line-switch-to-prev-tab
-   "S-TAB"   'tab-line-switch-to-prev-tab)
-
-  ;; space key as the global leader key
-  (general-create-definer hesham-cant-config/leader-keys
-    :states '(normal insert visual emacs)
-    :keymaps 'override
-    :prefix "SPC" ;; setting leader
-    :global-prefix "M-SPC") ;; Meta key + space to access leader in insert mode
-  ;; 'g' key as the global goto key
-  (general-create-definer hesham-cant-config/goto-keys
-    :states '(normal visual emacs)
-    :prefix "g")
-
-  ; Buffers
-  (hesham-cant-config/leader-keys
-   "b"    '(:ignore t                  :wk "Buffer")
-   "bb"   '(switch-to-buffer           :wk "Switch buffer")
-   "bi"   '(ibuffer                    :wk "IBuffer")
-   "bk"   '(kill-this-buffer           :wk "Kill this buffer")
-   "bn"   '(next-buffer                :wk "Next buffer")
-   "bp"   '(previous-buffer            :wk "Previous buffer")
-   "br"   '(revert-buffer              :wk "Reload buffer"))
-
-  ; Telescope-like stuff
-  (hesham-cant-config/leader-keys
-   "f"    '(:ignore t                  :wk "Find")
-   "fr"   '(counsel-recentf            :wk "Find recent files")
-   "fc"   '((lambda ()
-	      (interactive)
-	      (find-file "~/.emacs.d/init.el"))
-	    :wk "Edit emacs config")
-   "ff"   '(counsel-find-file          :wk "Find File"))
-
-  ; Evaluating Emacs lisp
-  (hesham-cant-config/leader-keys
-   "e"   '(:ignore t                  :wk "EShell/Evaluate")    
-   "eb"  '(eval-buffer                :wk "Evaluate elisp in buffer")
-   "ed"  '(eval-defun                 :wk "Evaluate defun containing or after point")
-   "ee"  '(eval-expression            :wk "Evaluate and elisp expression")
-   "el"  '(eval-last-sexp             :wk "Evaluate elisp expression before point")
-   "er"  '(eval-region                :wk "Evaluate elisp in region")
-
-   ; Eshel
-   "eh"  '(counsel-esh-history        :wk "Eshell history")
-   "es"  '(eshell                     :wk "Eshell"))
-
-  ; Help Stuff
-  (hesham-cant-config/leader-keys
-   "h"   '(:ignore t                  :wk "Help")
-   "hf"  '(describe-function          :wk "Describe function")
-   "hv"  '(describe-variable          :wk "Describe variable")
-   "hrr" '(reload-init-file           :wk "Reload emacs config"))
-
-  ; Toggle Stuff
-  (hesham-cant-config/leader-keys
-   "t"   '(:ignore t                  :wk "Toggle")
-   "tc"  '((lambda ()
-             (interactive)
-             (tab-line-close-tab t))
-           :wk "Close tab and it's buffer")
-   "tl"  '(display-line-numbers-mode  :wk "Toggle line numbers")
-   "tt"  '(visual-line-mode           :wk "Toggle truncated lines")
-   "tv"  '(vterm-toggle               :wk "Toggle vterm"))
-
-  ; Window Stuff
-  (hesham-cant-config/leader-keys
-   "w"   '(:ignore t                  :wk "Windows")
-   ;; Move Windows
-   "wH"  '(buf-move-left              :wk "Buffer move left")
-   "wJ"  '(buf-move-down              :wk "Buffer move down")
-   "wK"  '(buf-move-up                :wk "Buffer move up")
-   "wL"  '(buf-move-right             :wk "Buffer move right"))
-
-  (hesham-cant-config/leader-keys
-   "r"  '(:ignore                     :wk "Run")
-   "rc" '(app-launcher-run-app        :wk "App launcher"))
-
-  (hesham-cant-config/goto-keys
-   "cc" '(comment-line               :wk "Comment lines")
-   "l"  '(avy-goto-line              :wk "Quick line travel")
-   "s"  '(avy-goto-char-timer        :wk "Avy mode")
-   "r"  '(avy-resume                 :wk "Resume Avy")))
+  (load "keybindings"))
 
 ; Which key
 (use-package which-key
@@ -246,16 +268,13 @@
                          (or (equal major-mode 'vterm-mode)
                              (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
                   (display-buffer-reuse-window display-buffer-at-bottom)
-                  ;;(display-buffer-reuse-window display-buffer-in-direction)
-                  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-                  ;;(direction . bottom)
-                  ;;(dedicated . t) ;dedicated is supported in emacs27
                   (reusable-frames . visible)
                   (window-height . 0.3))))
 
 ; App launcher
 (use-package app-launcher
-  :straight '(:host github :repo "SebastienWae/app-launcher"))
+  :straight '(:host github :repo "SebastienWae/app-launcher")
+  :ensure t)
 
 (use-package dashboard
   :straight t
@@ -284,13 +303,23 @@
 
 (use-package projectile
   :straight t
+  :ensure t
   :diminish
   :config
   (projectile-mode 1))
 
 ; Language support
 (use-package lua-mode
-  :straight t)
+  :straight t
+  :ensure t
+  :config
+  (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+  (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+  (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
+(use-package odin-mode
+  :straight '(:host github :type git :repo "MrJCraft/odin-mode")
+  :ensure t
+  :mode "\\.odin\\'")
 (use-package javascript-mode
   :straight t)
 (use-package typescript-mode
@@ -300,23 +329,59 @@
 (use-package rust-mode
   :straight t)
 
-(use-package lsp-ui
-  :straight t
-  :ensure t)
 
 (use-package lsp-mode
   :straight t
+  :ensure t
   :commands (lsp lsp-deferred)
   :init
   (setq-default lsp-keymap-prefix "C-c l")
+  :hook ((
+          c-mode
+          c++-mode
+          typescript-mode
+          javascript-mode
+          odin-mode
+          lua-mode
+          zig-mode) . lsp-deferred)
   :config
+  (setq-default lsp-auto-guess-root t)
+
+  (setq lsp-prefer-flymake nil)
   (setq-default lsp-zig-zls-executable "~/zls/zig-out/bin/zls")
-  (lsp-enable-which-key-integration t)
-  (add-hook 'c-mode-hook #'lsp)
-  (add-hook 'c++-mode-hook #'lsp)
-  (add-hook 'typescript-mode-hook #'lsp)
-  (add-hook 'javascript-mode-hook #'lsp)
-  (add-hook 'zig-mode-hook #'lsp-deferred))
+  (setq-default lsp-clangd-binary-path "/usr/bin/clangd")
+  (setq-default lsp-clients-lua-language-server-bin "/home/hesham/.local/share/nvim/mason/bin/lua-language-server")
+  (setq lsp-language-id-configuration (cons '(odin-mode . "odin") lsp-language-id-configuration))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection "/home/hesham/lsp/ols/ols") ;; Adjust the path here
+                    :major-modes '(odin-mode)
+                    :server-id 'ols
+                    :multi-root t))
+  (lsp-enable-which-key-integration t))
+
+(use-package lsp-ui
+  :straight t
+  :ensure t
+  :commands lsp-ui-mode
+  :config
+  (setq lsp-ui-sideline-enable nil
+        lsp-ui-doc-enable t))
+
+;; (use-package corfu
+;;   :straight t
+;;   :init (global-corfu-mode))
+
+(use-package cape
+  :straight t
+  :ensure t
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  ;; (add-to-list 'completion-at-point-functions #'cape-symbol)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block))
+
+(use-package grip-mode
+  :straight t)
 
 (use-package company
   :straight t
@@ -335,41 +400,4 @@
   :after company
   :diminish
   :hook (company-mode . company-box-mode))
-
-(use-package grip-mode
-  :straight t)
-
-;; (use-package corfu
-;;   :straight '(corfu :type git :host github :repo "minad/corfu")
-;;   :custom
-;;   (corfu-cycle t)
-;;   (corfu-auto t)
-;;   (corfu-auto-prefix 2)
-;;   (corfu-quit-at-coundary 'separator)
-;;   (corfu-echo-documentation 0.25)
-;;   (corfu-preview-current 'insert)
-;;   (corfu-preselect-first nil)
-;;   :bind (:map corfu-map
-;;               ("M-TAB"      . corfu-insert-separator)
-;;               ("RET"        . nil)
-;;               ("TAB"        . corfu-next)
-;;               ([tab]        . corfu-next)
-;;               ("S-TAB"      . corfu-previous)
-;;               ([backtab]    . corfu-previous)
-;;               ("S-<return>" . corfu-insert))
-;;   :init
-;;   (global-corfu-mode)
-;;   (corfu-history-mode)
-;;   :config
-;;   (add-hook 'eshell-mode-hook
-;;             (lambda () (setq-local corfu-quit-at-boundary t
-;;                                    corfu-quit-no-match t
-;;                                    corfu-auto nil)
-;;               (corfu-mode))))
-
-;; (use-package emacs
-;;   :custom
-;;   (tab-always-indent 'complete)
-;;   (text-mode-ispell-word-completion nil)
-;;   (read-extended-command-predicate #'command-completion-default-include-p))
 

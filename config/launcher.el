@@ -32,7 +32,7 @@
                     (width . 80)
                     (height . 11)))
     (unwind-protect
-        (app-launrher-run-app)
+        (app-launcher-run-app)
         ;; (counsel-find-file)
       (delete-frame))))
 
