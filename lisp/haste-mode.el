@@ -12,16 +12,16 @@
 (defvar haste-font-lock-keywords
  `((,(regexp-opt '(
       "use" "import" "cimport" "mod"
-      "struct" "enum" "variant" "error" "impl"
+      "struct" "enum" "variant" "error" "union" "type" "impl"
       "func" "!func"
       "let" "!let"
-      "mut" "try" "catch" "and" "or" "not" "in" "is" "as"
+      "move" "mut" "try" "catch" "and" "or" "not" "in" "is" "as" "unsafe" "orelse"
       "if" "!if" "then" "else" "match" "case" "do"
       "for" "while" "loop" "skip" "stop"
-      "return" "defer"
-      "auto" "true" "false") 'words) . font-lock-keyword-face)
+      "return" "defer" "ret"
+      "auto" "true" "false" "null") 'words) . font-lock-keyword-face)
     ("\\<\\(\\w+\\)\\s-*(" 1 font-lock-function-name-face)
-    ("\\<\\([A-Z][A-Za-z0-9_]*\\)\\>" . font-lock-type-face))
+    ("\\<\\([A-Z][A-Za-z0-9_]*\\|any\\|int\\|float\\|float64\\|uint\\|uint8\\|uint16\\|uint32\\|uint64\\|int8\\|int16\\|int32\\|int64\\|string\\|str\\|char\\|rune\\|isize\\|usize\\|bool\\)\\>" . font-lock-type-face))
   "Highlighting expressions for Haste mode.")
 
 ;;; Syntax table

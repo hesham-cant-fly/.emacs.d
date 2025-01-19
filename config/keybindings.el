@@ -5,9 +5,9 @@
 
 (general-define-key
  :states   '(normal visual emacs dashboard)
- "TAB"     'tab-line-switch-to-next-tab
- [backtab] 'tab-line-switch-to-prev-tab
- "S-TAB"   'tab-line-switch-to-prev-tab)
+ "TAB"     'centaur-tabs-forward
+ [backtab] 'centaur-tabs-backward
+ "S-TAB"   'centaur-tabs-backward)
 
 ;; space key as the global leader key
 (general-create-definer hesham-cant-config/leader-keys
@@ -46,7 +46,7 @@
 	         (interactive)
 	         (find-file "~/.emacs.d/init.el"))
 	       :wk "Edit emacs config")
-  "ff"   '(counsel-find-file          :wk "Find File"))
+  "ff"   '(counsel-projectile-find-file          :wk "Find File"))
 
 ; Evaluating Emacs lisp
 (hesham-cant-config/leader-keys
@@ -77,7 +77,7 @@
             (tab-line-close-tab))
           :wk "Close tab and it's buffer")
   "tl"  '(display-line-numbers-mode  :wk "Toggle line numbers")
-  "tn"  '(neotree-toggle             :wk "Toggle neotree file viewer")
+  "tn"  '(treemacs             :wk "Toggle neotree file viewer")
   "tt"  '(visual-line-mode           :wk "Toggle truncated lines")
   "tv"  '(vterm-toggle               :wk "Toggle vterm"))
 

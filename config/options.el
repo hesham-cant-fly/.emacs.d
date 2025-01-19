@@ -1,18 +1,19 @@
 ;; Settings
 (setq-default auto-save-list-file-prefix nil) ; Something related to ~/.emacs.d/auto-safe-list i think
-(setq-default make-backup-files nil) ; no "name~" type of shit any more!!!
 (setq-default display-line-numbers-type 'relative) ; relative numbers :3
 (setq-default truncate-lines t) ; Let's disable line wraping :D
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default shell-file-name "/bin/fish")
-(setq-default make-backup-files nil)
+(setq-default make-backup-files nil) ; no "name~" type of shit any more!!!
+(setq-default create-lockfiles nil)
+(setq-default auto-save-default nil)
 (setq backward-delete-char-untabify-method nil)
 (setq backup-directory-alist '((".*" . "~/.local/share/Trash/files")))
 
 (add-to-list 'default-frame-alist '(alpha-background . 90)) ; Transparency
 
-(load-theme 'doom-badger t)
+(load-theme 'doom-acario-dark t)
 
 ; Gotta remeber how amazing the eval-region command is!!
 (set-face-attribute 'fixed-pitch nil ; Emacs font
@@ -35,7 +36,7 @@
 (global-display-line-numbers-mode t) ; Activates line numbers on emacs
 (global-visual-line-mode -1) ; Disabling line wraping (again)
 
-(global-tab-line-mode t) ; Activates the tab line
+;; (global-tab-line-mode 0) ; Activates the tab line
 (menu-bar-mode 0) ; Disalble the menu bar
 (tool-bar-mode 0) ; Kinda the same
 (scroll-bar-mode 0) ; No scroll bar
@@ -49,3 +50,6 @@
       eshell-scroll-to-bottom-on-input t
       eshell-destroy-buffer-when-process-dies t
       eshell-visual-commands'("fish" "bash" "htop" "ssh" "top" "zsh"))
+
+; Sublimity
+(require 'sublimity-scroll)
