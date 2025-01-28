@@ -13,18 +13,18 @@
 
 (add-to-list 'default-frame-alist '(alpha-background . 90)) ; Transparency
 
-(load-theme 'doom-acario-dark t)
+(load-theme 'doom-molokai t)
 
 ; Gotta remeber how amazing the eval-region command is!!
 (set-face-attribute 'fixed-pitch nil ; Emacs font
   :font "JetBrainsMono Nerd Font"
-  :height 130)
+  :height 170)
 (set-face-attribute 'default nil
   :font "JetBrainsMono Nerd Font"
-  :height 130)
+  :height 170)
 (set-face-attribute 'variable-pitch nil
   :font "Noto Sans Mono"
-  :height 130)
+  :height 170)
 
 (set-face-attribute 'font-lock-comment-face nil ; WOW!
   :slant 'italic)

@@ -33,12 +33,6 @@
   :straight t)
 (use-package dash
   :straight t)
-;; (use-package copilot
-;;   :straight '(:host github :repo "copilot-emacs/copilot.el" :files ("*.el"))
-;;   :ensure t
-;;   :init (global-copilot-mode)
-;;   :config
-;;   (add-to-list 'copilot-disable-predicates #'rk/copilot-disable-predicate))
 (use-package magit
   :straight t)
 (use-package diminish
@@ -465,6 +459,30 @@
    '(dashboard-heading ((t (:foreground "cyan" :weight bold :height 0.8))))))
 
 ; Language support
+; OCaml
+(use-package tuareg
+  :ensure t
+  :mode (("\\.ocamlinit\\'" . tuareg-mode)))
+(use-package dune
+  :ensure t)
+(use-package merlin
+  :ensure t
+  :config
+  (add-hook 'tuareg-mode-hook #'merlin-mode)
+  (add-hook 'merlin-mode-hook #'company-mode)
+  ;; we're using flycheck instead
+  (setq merlin-error-after-save nil))
+(use-package merlin-eldoc
+  :ensure t
+  :hook ((tuareg-mode) . merlin-eldoc-setup))
+(use-package flycheck-ocaml
+  :ensure t
+  :config
+  (flycheck-ocaml-setup))
+
+; Others
+(use-package love-minor-mode
+  :straight t)
 (use-package lua-mode
   :straight t
   :ensure t
@@ -476,12 +494,18 @@
   :straight '(:host github :type git :repo "MrJCraft/odin-mode")
   :ensure t
   :mode "\\.odin\\'")
+(use-package js2-mode
+  :straight t)
 (use-package typescript-mode
   :straight t)
 (use-package cc-mode
   :straight t)
+(use-package c3-ts-mode
+  :straight '(:host github :type git :repo "c3lang/c3-ts-mode"))
 (use-package zig-mode
   :straight t)
+(use-package vlang-mode
+	  :straight '(:type git :host github :repo "Naheel-Azawy/vlang-mode"))
 (use-package rust-mode
   :straight t)
 (use-package go-mode
@@ -518,21 +542,33 @@
          (svelte-mode . eglot-ensure)
          (zig-mode . eglot-ensure)
          (rust-mode . eglot-ensure)
-         (odin-mode . eglot-ensure))
+         (odin-mode . eglot-ensure)
+         (vlang-mode . eglot-ensure)
+         (c3-ts-mode . eglot-ensure)
+         (js2-mode . eglot-ensure)
+         (lua-mode . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs
                '(svelte-mode . ("/home/hesham/.local/share/nvim/mason/bin/svelteserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '(typescript-mode . ("/home/hesham/.local/share/nvim/mason/bin/typescript-language-server" "--stdio")))
   (add-to-list 'eglot-server-programs
+               '(js2-mode . ("/home/hesham/.local/share/nvim/mason/bin/typescript-language-server" "--stdio")))
+  (add-to-list 'eglot-server-programs
                '(python-mode . ("/home/hesham/.local/share/nvim/mason/bin/pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '(zig-mode . ("/home/hesham/zls/zig-out/bin/zls")))
   (add-to-list 'eglot-server-programs
                '(odin-mode . ("/home/hesham/lsp/ols/ols" "--stdio")))
-(add-to-list 'eglot-server-programs
+  (add-to-list 'eglot-server-programs
              '((rust-ts-mode rust-mode) .
                ("rustup" "run" "stable" "rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+  (add-to-list 'eglot-server-programs
+               '(c3-ts-mode . ("/home/hesham/lsp/server/bin/release/c3lsp")))
+  (add-to-list 'eglot-server-programs
+               '(lua-mode . ("/home/hesham/.local/share/nvim/mason/bin/lua-language-server")))
+  (add-to-list 'eglot-server-programs
+               '(vlang-mode . ("/home/hesham/v-analyzer/bin/v-analyzer" "--stdio")))
 )
 
 (use-package cape

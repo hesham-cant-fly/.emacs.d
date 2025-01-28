@@ -21,7 +21,7 @@
       "return" "defer" "ret"
       "auto" "true" "false" "null") 'words) . font-lock-keyword-face)
     ("\\<\\(\\w+\\)\\s-*(" 1 font-lock-function-name-face)
-    ("\\<\\([A-Z][A-Za-z0-9_]*\\|any\\|int\\|float\\|float64\\|uint\\|uint8\\|uint16\\|uint32\\|uint64\\|int8\\|int16\\|int32\\|int64\\|string\\|str\\|char\\|rune\\|isize\\|usize\\|bool\\)\\>" . font-lock-type-face))
+    ("\\<\\([A-Z][A-Za-z0-9_]*\\|self\\|any\\|int\\|float\\|float64\\|uint\\|uint8\\|uint16\\|uint32\\|uint64\\|int8\\|int16\\|int32\\|int64\\|string\\|str\\|char\\|rune\\|isize\\|usize\\|bool\\)\\>" . font-lock-type-face))
   "Highlighting expressions for Haste mode.")
 
 ;;; Syntax table
