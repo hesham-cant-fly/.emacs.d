@@ -20,7 +20,6 @@
 ;;     (eval-buffer)
 ;;     (quelpa-self-upgrade)))
 
-(setq package-enable-at-startup nil)
 
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
@@ -61,8 +60,6 @@
 (add-hook 'after-init-hook #'elpaca-process-queues)
 (elpaca `(,@elpaca-order))
 
-;; using use-package
 (elpaca elpaca-use-package
   (elpaca-use-package-mode))
-(require 'use-package)
 

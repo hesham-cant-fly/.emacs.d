@@ -1,5 +1,7 @@
 ;; the prefix is config/
 
+(setq package-enable-at-startup nil)
+
 (defmacro config/load-all (root &rest names)
   (unless (stringp root)
     (error "Root is exepected to be a string"))
@@ -15,9 +17,11 @@
  "emacs-options.el"
  "bootstrap.el"
  "modals.el"
+ "keybindings.el"
  "movement.el"
+ "completions.el"
+ "dired-conf.el"
  "visuals.el"
+ "ide.el"
  "git-integration.el")
 
-(put 'upcase-region 'disabled nil)
-(put 'dired-find-alternate-file 'disabled nil)

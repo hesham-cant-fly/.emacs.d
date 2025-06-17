@@ -8,9 +8,17 @@
   :config
   (which-key-mode))
 
+(use-package rainbow-delimiters
+	:ensure t
+	:hook ((prog-mode) . rainbow-delimiters-mode))
+
 (use-package doom-themes
   :ensure t
   :config
   (load-theme 'doom-gruvbox t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
+
+(use-package all-the-icons
+	:ensure t
+	:if (display-graphic-p))

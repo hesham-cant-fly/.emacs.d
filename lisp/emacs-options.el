@@ -1,12 +1,13 @@
 (setq current-theme 'wombat)
 (load-theme current-theme t)
 
+;; =======================================================================================
+
 (setq-default
  ;; Editor Tweaks
  tab-width 2
  visible-bell t
  truncate-lines t
- truncate-lines nil
  auto-save-default nil
  display-line-numbers-type 'relative
  custom-file (expand-file-name "custom.el" user-emacs-directory)
@@ -39,8 +40,8 @@
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
+(recentf-mode)
 
 (add-hook #'prog-mode (lambda ()
-												(toggle-truncate-lines 1)
 												(display-line-numbers-mode)))
 

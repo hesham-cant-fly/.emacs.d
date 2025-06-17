@@ -1,4 +1,8 @@
-transient/
-*-cache/
-elpaca/
 elpa/
+games/
+elpaca/
+*-cache/
+transient/
+
+history
+recentf

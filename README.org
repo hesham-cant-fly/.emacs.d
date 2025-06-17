@@ -12,9 +12,81 @@ Hand writen emacs config to suit my personal needs :3
   - [[https://github.com/linktohack/evil-commentary][Evil Commentary]] to easly comment lines and stuff.
 - =God Mode= for no reason actually. I just find it kind of cool.
 
+** Movement (int =lisp/movement.el=)
+- =avy= something like leap.nvim.
+- Key maps
+| key | function         |
+|-----+------------------|
+| g l | goto line        |
+| f   | Better find char |
+| F   | Better find char |
+
+** Completions (in =lisp/completions.el=)
+- =vertico=
+  - =vertico-flat= (commented)
+  - =orderless=
+  - =savehist=
+  - =marginalia=
+  - =all-the-icons-completion=
+
+** Keybindings (in =lisp/keybinding.el=)
+*** Files
+| key | function                                                |
+|-----+---------------------------------------------------------|
+| f f | Find File                                               |
+| f r | Recent Files                                            |
+| f c | Open =init.el=                                          |
+| f C | Open the emacs user directory (usealy in =~/.emacs.d/=) |
+
+*** Dired
+| key | Function    |
+|-----+-------------|
+| d d | Opens Dired |
+
+*** Buffers
+| key | Function         |
+|-----+------------------|
+| b i | Open IBuffer     |
+| b b | Find a Buffer    |
+| b k | Kill This Buffer |
+| b r | Reload Buffer    |
+
+*** Magit
+| key | Function   |
+|-----+------------|
+| g g | Open Magit |
+
+*** Compilation
+| key | Function |
+|-----+----------|
+| c c | Start Compilation Mode |
+
+*** Toggles
+| key | Function                   |
+|-----+----------------------------|
+| t t | Tiggle Truncate Lines      |
+| t d | Toggle Rainbow parentheses |
+
+*** Help
+| key | Function          |
+|-----+-------------------|
+| h v | Describe Variable |
+| h f | Describe Function |
+| h k | Describe Key      |
+
 ** Visuals (in =lisp/visuals.el=)
 - =which key= somehow included in emacs v30.
 - [[https://github.com/tarsius/keycast][Keycast]] i just like it.
+- =all the icons=
+
+** Dired (in =lisp/dired-conf.el=)
+- =dired icons=
+- dired lists directories first
+- dired remaps
+| key | function                            |
+|-----+-------------------------------------|
+| h   | Similar to =cd ..=                  |
+| l   | Opens a file or go into a directory |
 
 ** Editor Enhancement (in =lisp/emacs-options.el=)
 - 2 width tab.
