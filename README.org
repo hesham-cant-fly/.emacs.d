@@ -1,0 +1,29 @@
+#+title: Emacs Config
+
+Hand writen emacs config to suit my personal needs :3
+
+* Features
+** Modal Edit (in =lisp/modals.el=)
+- [[https://github.com/emacs-evil/evil][Evil]] mode as the default modal editing.
+  - [[https://github.com/emacs-evil/evil-collection][Evil Collection]] to reduce context switching.
+  - [[https://github.com/emacs-evil/evil-surround][Evil Surround]] to easly surround things in pairs.
+  - [[https://github.com/Dewdrops/evil-exchange][Evil Exchange]] to exchange stuff around (I don't use it that much).
+  - [[https://github.com/rejeep/drag-stuff.el][Drag Stuff]] to easly drag stuff around.
+  - [[https://github.com/linktohack/evil-commentary][Evil Commentary]] to easly comment lines and stuff.
+- =God Mode= for no reason actually. I just find it kind of cool.
+
+** Visuals (in =lisp/visuals.el=)
+- =which key= somehow included in emacs v30.
+- [[https://github.com/tarsius/keycast][Keycast]] i just like it.
+
+** Editor Enhancement (in =lisp/emacs-options.el=)
+- 2 width tab.
+- relative line number
+- visible bell: i think its pretty cool.
+
+** Git Integrations (in =lisp/git-integration.el=)
+- =magit= is present.
+- =git-gutter= & =git-gutter-fringe= is present too.
+
+
+
