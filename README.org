@@ -78,6 +78,7 @@ Hand writen emacs config to suit my personal needs :3
 - =which key= somehow included in emacs v30.
 - [[https://github.com/tarsius/keycast][Keycast]] i just like it.
 - =all the icons=
+- =elcord= to let everyone knows that I'm a nerd 8)
 
 ** Dired (in =lisp/dired-conf.el=)
 - =dired icons=

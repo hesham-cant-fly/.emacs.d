@@ -44,7 +44,7 @@
 	(config/leader-def
 		:states 'normal
 		"g"   '(:ignore t             :wk "Git")
-		"g g" '(magit                 :wk "Open Magit))
+		"g g" '(magit                 :wk "Open Magit"))
 
 	;; Compilation
 	(config/leader-def

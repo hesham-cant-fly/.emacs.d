@@ -8,6 +8,11 @@
   :config
   (which-key-mode))
 
+(use-package elcord
+	:ensure t
+	:config
+	(elcord-mode))
+
 (use-package rainbow-delimiters
 	:ensure t
 	:hook ((prog-mode) . rainbow-delimiters-mode))
