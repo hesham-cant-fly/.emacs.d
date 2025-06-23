@@ -4,5 +4,13 @@ elpaca/
 *-cache/
 transient/
 
+.org-id-locations
+bookmarks
+org-roam.db
+persp-confs/
+projects
+tramp
+type-break
+
 history
 recentf
