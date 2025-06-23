@@ -1,8 +1,9 @@
 ;; Bootsraping file. initializes global functions, variables
 ;; and maybe a package manager.
+(setq package-enable-at-startup nil)
 
-(when (file-exists-p custom-file)
-  (load custom-file))
+(when (featurep 'package)
+  (unload-feature 'package t))
 
 ;; Setup packages and package repositories
 ;; (require 'package)
@@ -19,7 +20,6 @@
 ;;     (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
 ;;     (eval-buffer)
 ;;     (quelpa-self-upgrade)))
-
 
 (defvar elpaca-installer-version 0.11)
 (defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))

@@ -10,6 +10,10 @@
 		:states '(normal visual emacs)
 		:prefix "SPC m")
 
+	;; Search
+	(config/leader-def
+		"s" '(:ignore t :wk "Search"))
+
 	;; Files
 	(config/leader-def
 		:states 'normal
@@ -34,11 +38,23 @@
 	;; Buffers
 	(config/leader-def
 		:states 'normal
-		"b"   '(:ignore t             :wk "Buffers")
-		"b i" '(ibuffer               :wk "Open IBuffer")
-		"b b" '(switch-to-buffer      :wk "Find a Buffer")
-		"b k" '(kill-current-buffer   :wk "Kill This Buffer")
-		"b r" '(revert-buffer         :wk "Reload buffer"))
+		"b"   '(:ignore t              :wk "Buffers")
+		"b i" '(ibuffer                :wk "Open IBuffer")
+		"b b" '(persp-switch-to-buffer :wk "Find a Buffer")
+		"b k" '(kill-current-buffer    :wk "Kill This Buffer")
+		"b r" '(revert-buffer          :wk "Reload buffer"))
+
+	;; Project
+	(config/leader-def
+		:states 'normal
+		"SPC" '(project-find-file :wk "Find File")
+
+		"p"   '(:ignore t                       :wk "Project")
+		"p p" '(project-switch-project          :wk "Find Project")
+		"p a" '(project-remember-projects-under :wk "Add Known Project")
+		"p r" '(project-forget-project          :wk "Forgot Project")
+		"p R" '(project-compile                 :wk "Run Project")
+		"p q" '(project-kill-buffers            :wk "Quit Project"))
 
 	;; Magit
 	(config/leader-def

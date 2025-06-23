@@ -5,6 +5,27 @@
 	(drag-stuff-global-mode 1)
 	(drag-stuff-define-keys))
 
+(use-package subword
+	:hook
+	(prog-mode . subword-mode)
+	:general
+	(config/leader-def
+		:states 'normal
+		"t s" '(subword-mode   :wk "Toggle subword-mode")))
+
+(use-package superword
+	:general
+	(config/leader-def
+		:states 'normal
+		"t S" '(superword-mode :wk "Toggle superword-mode")))
+
+(use-package evil-goggles
+	:ensure t
+	:after evil
+	:config
+	(evil-goggles-mode)
+	(evil-goggles-use-diff-faces))
+
 (use-package evil
 	:ensure t
 	:custom
