@@ -11,9 +11,10 @@
       (unless (stringp name)
         (error (format "`%s` isn't a string. got `%s`"
                        name (type-of name))))
-      (load-file (expand-file-name name root-path)))))
+      (load-file (expand-file-name name root-path))))
+  (elpaca-wait))
 
-(+ 2 3 4 5 6 7 8 9 1)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
 (config/load-all
  "lisp"
@@ -29,7 +30,14 @@
  "visuals.el"
  "ide.el"
  "org-mode-config.el"
- "git-integration.el")
+ "git-integration.el"
+ "universe.el")
+
+(load-theme 'doom-dark+ t)
+;; (load-theme 'timu-macos t)
+(load-theme 'fleury t)
+
+;; (load-theme 'gruvbox-dark-hard t)
 
 (config/load-all
  "modes"

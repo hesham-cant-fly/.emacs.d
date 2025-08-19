@@ -7,7 +7,7 @@
 	(visual-fill-column-finges-outside-margins t))
 
 (use-package type-break
-	:hook (after-init . type-break-mode)
+	;; :hook (after-init . type-break-mode)
 	:custom
 	(type-break-interval (* 30 60))
 	(type-break-good-rest-interval (* 10 60))
@@ -16,6 +16,10 @@
 	(type-break-keystroke-threshold '(2100 . 3000))
 	(type-break-demo-boring-stats t)
 	(type-break-demo-functions '(type-break-demo-boring)))
+
+(use-package org-modern
+  :ensure t
+  :hook (org-mode . org-modern-mode))
 
 (use-package org
 	:custom
@@ -65,7 +69,7 @@
 	 ;; '(org-level-3 ((t (:foreground "#fb8a26" :height 1.15 :weight bold :slant normal))))
 
 	 ;; Code block and quote background
-	 '(org-code ((t (:background "#2e2e2e"))))  ;; Replace "#2e2e2e" with a darkened bg
+	 '(org-code ((t (:background "#2e2e2e")))) ;; Replace "#2e2e2e" with a darkened bg
 	 '(org-quote ((t (:background "#2e2e2e")))) ;; Same here
 	 )
 	(defun my/org-follow-link-or-return ()
@@ -81,7 +85,7 @@
 																				(id . org-id-open)
 																				(calendar . calendar))))
 						(org-open-at-point))
-				(org-return)))) ; Default behavior
+				(org-return))))                 ; Default behavior
   
   ;; Bind to Enter in Evil normal state for Org-mode
   (with-eval-after-load 'org

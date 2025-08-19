@@ -10,6 +10,13 @@
 		:states '(normal visual emacs)
 		:prefix "SPC m")
 
+  (config/leader-def
+    "l" '(:ignore t :wk "LSP"))
+
+  ;; Open
+  (config/leader-def
+    "o" '(:ignore t :wk "Open"))
+
 	;; Search
 	(config/leader-def
 		"s" '(:ignore t :wk "Search"))
@@ -53,7 +60,7 @@
 		"p p" '(project-switch-project          :wk "Find Project")
 		"p a" '(project-remember-projects-under :wk "Add Known Project")
 		"p r" '(project-forget-project          :wk "Forgot Project")
-		"p R" '(project-compile                 :wk "Run Project")
+		;; "p R" '(project-compile                 :wk "Run Project")
 		"p q" '(project-kill-buffers            :wk "Quit Project"))
 
 	;; Magit
@@ -65,8 +72,8 @@
 	;; Compilation
 	(config/leader-def
 		:states 'normal
-		"c"   '(:ignore t             :wk "Compilation")
-		"c c" '(compile               :wk "Open Compilation Mode"))
+		"c"   '(:ignore t             :wk "Compilation"))
+		;; "c c" '(compile               :wk "Open Compilation Mode"))
 
 	;; Toggle Stuff
 	(config/leader-def

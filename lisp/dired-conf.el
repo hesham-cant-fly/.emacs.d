@@ -9,7 +9,6 @@
 (use-package all-the-icons-dired
 	:ensure t
 	:if (display-graphic-p)
-	:after (dired all-the-icons)
   :hook (dired-mode . all-the-icons-dired-mode)
 	:custom
 	(all-the-icons-dired-monochrome nil))

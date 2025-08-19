@@ -4,18 +4,33 @@
 (defconst haste--font-lock-defaults
 	(let ((keywords
 				 '(
-					 "var" "val" "func"
+           "owned"
+           "context" "new" "delete"
+           "interface" "class" "!class" "enum" "variant" "error"
+           "static" "import" "pub" "!pub" "use"
+					 "var" "!var" "func" "!func"
+           "match" "case" "!case" "if" "!if" "else" "do" "then"
+           "for" "while" "skip" "stop"
+           "in" "is" "or" "and" "not"
+           "try" "catch"
+           "return" "defer" "errdefer"
+           "true" "false" "null"
 					 )
 				 )
 				(types
 				 '(
+           "auto" "void"
+					 "char" "str" "string"
 					 "bool"
-					 "str" "string"
-					 "uint" "int" "usize" "isize"
+           "uint" "uint8" "uint16" "uint32" "uint64" "int" "int8" "int16" "int32" "int64" "usize" "isize"
+           "float" "float64" "fsize"
+           "self"
 					 )))
-		`(((,(rx-to-string `(: (or ,@keywords))) 0 font-lock-keyword-face)
+;;(rx-to-string `(: (or ,@keywords)))
+		`(((,(regexp-opt keywords 'words) 0 font-lock-keyword-face)
 			 ("\\([[:word:]]+\\)\s*(" 1 font-lock-function-name-face)
-			 (,(rx-to-string `(: (or ,@types))) 0 font-lock-type-face)))))
+       ;; ("[[:word:]]+" 1 font-lock-variable-name-face)
+			 (,(regexp-opt types 'words) 0 font-lock-type-face)))))
 
 
 (defvar haste-mode-syntax-table
@@ -26,18 +41,20 @@
 
 		;; Word
 		(modify-syntax-entry ?_ "w" st)
-    (modify-syntax-entry ?- "w" st)
+    (modify-syntax-entry ?! "w" st)
+    (modify-syntax-entry ?$ "w" st)
+    (modify-syntax-entry ?@ "w" st)
 
     ;; both single and double quotes makes strings
     (modify-syntax-entry ?\" "\"" st)
-    (modify-syntax-entry ?' "'" st)
+    (modify-syntax-entry ?' "\"" st)
 
     ;; add comments.
     (modify-syntax-entry ?# "<" st)
     (modify-syntax-entry ?\n ">" st)
 
     ;; '==' as punctuation
-    (modify-syntax-entry ?= ".")
+    (modify-syntax-entry ?= "." st)
     st))
 
 (defun haste-indent-line ()
@@ -76,6 +93,7 @@
 (define-abbrev-table 'haste-mode-abbrev-table
 	'())
 
+;;;###autoload
 (define-derived-mode haste-mode prog-mode "haste"
   "Major mode for haste files."
   :abbrev-table haste-mode-abbrev-table

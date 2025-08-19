@@ -4,10 +4,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("0325a6b5eea7e5febae709dab35ec8648908af12cf2d2b569bedc8da0a3a81c1"
-     default))
- '(org-fold-catch-invisible-edits 'show-and-error nil nil "Customized with use-package org"))
+ '(org-fold-catch-invisible-edits 'show-and-error nil nil "Customized with use-package org")
+ '(package-selected-packages '(autothemer bug-hunter)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -19,4 +17,7 @@
  '(evil-goggles-undo-redo-add-face ((t (:inherit diff-added))))
  '(evil-goggles-undo-redo-change-face ((t (:inherit diff-changed))))
  '(evil-goggles-undo-redo-remove-face ((t (:inherit diff-removed))))
- '(evil-goggles-yank-face ((t (:inherit diff-changed)))))
+ '(evil-goggles-yank-face ((t (:inherit diff-changed))))
+ '(org-code ((t (:background "#2e2e2e"))))
+ '(org-document-title ((t (:height 2.1 :weight bold))))
+ '(org-quote ((t (:background "#2e2e2e")))))

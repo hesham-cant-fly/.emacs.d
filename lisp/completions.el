@@ -12,10 +12,11 @@
 	:config
 	(vertico-mode))
 
-(use-package vertico-posframe
-	:ensure t
-	:config
-	(vertico-posframe-mode 1))
+;; (use-package vertico-posframe
+;; 	:ensure t
+;; 	:config
+;; 	(vertico-posframe-mode 1)
+;;   )
 
 (defun config/search-buffer ()
   "Search the current buffer using `consult-line`."
@@ -73,8 +74,9 @@
 
 (use-package all-the-icons-completion
 	:ensure t
+  :defer
   :after (marginalia all-the-icons)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :hook (marginalia-mode . #'all-the-icons-completion-marginalia-setup)
   :init
   (all-the-icons-completion-mode))
 
