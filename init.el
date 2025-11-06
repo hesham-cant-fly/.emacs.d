@@ -1,8 +1,5 @@
 ;; the prefix is config/
 
-(when (and custom-file (file-exists-p custom-file))
-  (load custom-file))
-
 (defun config/load-all (root &rest names)
   (unless (stringp root)
     (error "Root is exepected to be a string"))
@@ -15,6 +12,9 @@
   (elpaca-wait))
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+
+(defun config/activate-lsp ()
+  (lsp))
 
 (config/load-all
  "lisp"
@@ -33,13 +33,18 @@
  "git-integration.el"
  "universe.el")
 
-(load-theme 'doom-dark+ t)
+(load-theme 'spaceway t)
+;; (load-theme 'doom-dark+ t)
 ;; (load-theme 'timu-macos t)
-(load-theme 'fleury t)
-
+;; (load-theme 'fleury t)
+;; (load-theme 'doom-rose-pine t)
+;; (load-theme 'monokai t)
 ;; (load-theme 'gruvbox-dark-hard t)
 
 (config/load-all
  "modes"
  "haste-mode.el")
 (put 'dired-find-alternate-file 'disabled nil)
+
+(when (and custom-file (file-exists-p custom-file))
+  (load custom-file))

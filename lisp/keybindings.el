@@ -40,14 +40,18 @@
 	(config/leader-def
 		:states 'normal
 		"d"   '(:ignore t             :wk "Dired")
-		"d d" '(dired-jump            :wk "Open Dired"))
+		"d d" '(dired-jump            :wk "Open Dired")
+        "d p" '((lambda ()
+                  (interactive)
+                  (find-file (expand-file-name "~/Documents/Projects/")))
+                :wk "Open Project Directory"))
 
 	;; Buffers
 	(config/leader-def
 		:states 'normal
 		"b"   '(:ignore t              :wk "Buffers")
 		"b i" '(ibuffer                :wk "Open IBuffer")
-		"b b" '(persp-switch-to-buffer :wk "Find a Buffer")
+        "b b" '(persp-switch-to-buffer :wk "Find a Buffer")
 		"b k" '(kill-current-buffer    :wk "Kill This Buffer")
 		"b r" '(revert-buffer          :wk "Reload buffer"))
 
@@ -73,7 +77,6 @@
 	(config/leader-def
 		:states 'normal
 		"c"   '(:ignore t             :wk "Compilation"))
-		;; "c c" '(compile               :wk "Open Compilation Mode"))
 
 	;; Toggle Stuff
 	(config/leader-def

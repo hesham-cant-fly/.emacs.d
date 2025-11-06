@@ -4,34 +4,47 @@
 (defconst haste--font-lock-defaults
 	(let ((keywords
 				 '(
-           "owned"
-           "context" "new" "delete"
-           "interface" "class" "!class" "enum" "variant" "error"
-           "static" "import" "pub" "!pub" "use"
-					 "var" "!var" "func" "!func"
-           "match" "case" "!case" "if" "!if" "else" "do" "then"
-           "for" "while" "skip" "stop"
+           "dynamic"
+           "undefined"
+           "context"
+           "interface" "struct" "struct" "enum" "variant" "error"
+           "static" "import" "from" "cimport" "pub" "!pub" "use"
+					 "var" "const"
+           "cast" "transmute"
+           "if" "!if" "else" "do" "then"
+           "loop" "for" "while" "skip" "stop"
+           "orelse"
            "in" "is" "or" "and" "not"
            "try" "catch"
            "return" "defer" "errdefer"
            "true" "false" "null"
+           "auto"
+           "inline"
+           "async" "await"
 					 )
 				 )
 				(types
 				 '(
-           "auto" "void"
+           "it"
+           "anytype" "type" "void"
 					 "char" "str" "string"
 					 "bool"
            "uint" "uint8" "uint16" "uint32" "uint64" "int" "int8" "int16" "int32" "int64" "usize" "isize"
            "float" "float64" "fsize"
+           "cbool" "cfloat" "cstr" "cint" "cdouble"
            "self"
 					 )))
 ;;(rx-to-string `(: (or ,@keywords)))
 		`(((,(regexp-opt keywords 'words) 0 font-lock-keyword-face)
-			 ("\\([[:word:]]+\\)\s*(" 1 font-lock-function-name-face)
-       ;; ("[[:word:]]+" 1 font-lock-variable-name-face)
+			 ("#\\([[:word:]]+\\)" 0 font-lock-keyword-face)
+			 ("\\([[:word:]]+\\)\s*\\(<.*>\\)?\s*(" 1 font-lock-function-name-face)
+			 ("@\\([[:word:]]+\\)" 0 font-lock-function-name-face)
+       ("#" 0 font-lock-keyword-face)
+       ("!" 0 font-lock-keyword-face)
+			 ("class\s+\\([[:word:]]+\\)" 1 font-lock-type-face)
+			 ("enum\s+\\([[:word:]]+\\)" 1 font-lock-type-face)
+			 ("variant\s+\\([[:word:]]+\\)" 1 font-lock-type-face)
 			 (,(regexp-opt types 'words) 0 font-lock-type-face)))))
-
 
 (defvar haste-mode-syntax-table
 	(let ((st (make-syntax-table)))
@@ -49,12 +62,19 @@
     (modify-syntax-entry ?\" "\"" st)
     (modify-syntax-entry ?' "\"" st)
 
-    ;; add comments.
-    (modify-syntax-entry ?# "<" st)
-    (modify-syntax-entry ?\n ">" st)
+    ;; ;; add comments.
+    ;; (modify-syntax-entry ?# "<" st)
+    ;; (modify-syntax-entry ?\n ">" st)
 
     ;; '==' as punctuation
     (modify-syntax-entry ?= "." st)
+
+    ;; C++-style // comments
+    (modify-syntax-entry ?/ ". 124b" st)
+    (modify-syntax-entry ?\n "> b" st)
+
+    ;; C-style /* ... */ comments
+    (modify-syntax-entry ?* ". 23" st)
     st))
 
 (defun haste-indent-line ()
@@ -96,10 +116,16 @@
 ;;;###autoload
 (define-derived-mode haste-mode prog-mode "haste"
   "Major mode for haste files."
+  :syntax-table haste-mode-syntax-table
   :abbrev-table haste-mode-abbrev-table
   (setq font-lock-defaults haste--font-lock-defaults)
-  (setq-local comment-start "#")
-  (setq-local comment-start-skip "#+[\t ]*")
+  ;; Line comments
+  (setq-local comment-start "//")
+  (setq-local comment-start-skip "//+[\t ]*")
+  ;; Block comments
+  (setq-local comment-end "*/")
+  (setq-local comment-multi-line t)
+  ;; Indentation
   (setq-local indent-line-function #'haste-indent-line)
   (setq-local indent-tabs-mode t))
 

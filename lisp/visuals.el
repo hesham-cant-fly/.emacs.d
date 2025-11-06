@@ -75,7 +75,8 @@
 (use-package elcord
 	:ensure t
 	:config
-	(elcord-mode))
+	;; (elcord-mode)
+  )
 
 (use-package rainbow-delimiters
 	:ensure t
@@ -268,11 +269,6 @@
   :ensure t
   :config)
 
-(use-package doom-themes
-  :ensure t
-  :config
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
 
 (use-package wildcharm-theme
   :ensure t
@@ -288,4 +284,8 @@
 
 (use-package jetbrains-darcula-theme
 	:ensure t)
-
+(use-package doom-themes
+  :ensure t
+  :config
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config))

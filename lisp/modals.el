@@ -58,6 +58,9 @@
 	:after evil
 	:config
 	(evil-collection-init))
+(use-package helix
+  :ensure t
+  :config)
 
 (use-package god-mode
 	:ensure t

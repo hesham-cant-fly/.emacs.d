@@ -26,23 +26,26 @@
 (add-to-list 'default-frame-alist
 						 '(alpha-background . 100))
 
+(setq-default line-spacing 0)
+
 ;; Setting up emacs fonts
-(let ((font-size 150)
-      (font-family "JetBrainsMono Nerd Font";;"DepartureMono Nerd Font Mono"
-       ))
+(let ((font-size 170)
+      (font-family "0xProto Nerd Font Mono"))
   (set-face-attribute 'fixed-pitch nil
-                      :font font-family ;; "JetBrainsMono Nerd Font"
+                      :font font-family
                       :height font-size)
   (set-face-attribute 'default nil
-                      :font font-family ;; "JetBrainsMono Nerd Font"
+                      :font font-family
                       :height font-size)
   (set-face-attribute 'variable-pitch nil
-                      :font font-family ;; "JetBrainsMono Nerd Font"
+                      :font font-family
                       :height font-size)
   (set-face-attribute 'font-lock-comment-face nil
                       :slant 'italic)
   (set-face-attribute 'font-lock-keyword-face nil
-                      :slant 'italic))
+                      :slant 'italic)
+  (set-fontset-font t 'arabic
+                    (font-spec :family "Amiri" :size 16)))
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
