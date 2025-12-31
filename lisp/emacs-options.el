@@ -1,9 +1,12 @@
+(indent-tabs-mode)
 (setq-default
  ;; Editor Tweaks
- tab-width 2
+ gc-cons-threshold 50000000
+ x-stretch-cursor t
+ tab-width 4
  visible-bell t
  truncate-lines t
- indent-tabs-mode nil
+ indent-tabs-mode t
  auto-save-default nil
  display-line-numbers-type 'relative
  custom-file (expand-file-name "custom.el" user-emacs-directory)
@@ -24,12 +27,12 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (add-to-list 'default-frame-alist
-						 '(alpha-background . 100))
+			 '(alpha-background . 100))
 
 (setq-default line-spacing 0)
 
 ;; Setting up emacs fonts
-(let ((font-size 170)
+(let ((font-size 160)
       (font-family "0xProto Nerd Font Mono"))
   (set-face-attribute 'fixed-pitch nil
                       :font font-family
@@ -50,18 +53,31 @@
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
-(recentf-mode)
+(recentf-mode 1)
+(global-auto-revert-mode 1)
 
-(add-hook #'prog-mode-hook (lambda ()
-                             (interactive)
-                             (display-line-numbers-mode)))
-(defun my-force-tab-width ()
-  "Force tab width to 2 and use spaces for indentation."
-  (setq tab-width 2)
-  (setq indent-tabs-mode nil))
+(add-hook #'prog-mode-hook
+		  (lambda ()
+			(interactive)
+			(display-line-numbers-mode)
+			(setq-local indent-tabs-mode t)
+			(setq-local tab-width 4)))
 
-(add-hook 'after-change-major-mode-hook 'my-force-tab-width)
+(setq-default c-basic-offset tab-width
+              cperl-indent-level tab-width
+              web-mode-code-indent-offset tab-width
+              web-mode-markup-indent-offset tab-width
+              web-mode-css-indent-offset tab-width
+              js-indent-level tab-width
+              rust-indent-offset tab-width
+              zig-indent-offset tab-width
+              nim-indent-offset tab-width
+              ada-indent tab-width
+              ada-use-indent tab-width
+              ada-when-indent tab-width
+              ada-with-indent tab-width
+              ada-label-indent (- tab-width)
+              )
 
 (defalias (intern "toggle-read-only")
   `(lambda () (interactive) (read-only-mode)))
-

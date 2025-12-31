@@ -6,8 +6,9 @@
  ;; If there is more than one, they won't work right.
  '(org-fold-catch-invisible-edits 'show-and-error nil nil "Customized with use-package org")
  '(package-selected-packages
-   '(clojure-mode clojure-ts-mode dockerfile-mode smalltalk-mode
-                  spacemacs-theme tuareg yaml-mode zig-mode)))
+   '(clojure-mode clojure-ts-mode dart-mode dockerfile-mode ef-themes
+				  smalltalk-mode spacemacs-theme tuareg yaml-mode
+				  zig-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

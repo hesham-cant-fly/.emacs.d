@@ -12,5 +12,14 @@ projects
 tramp
 type-break
 
+.cache/
+.dap-*
+session*
+.lsp-*
+url/
+tree-sitter/
+
+.openai-key
+
 history
 recentf

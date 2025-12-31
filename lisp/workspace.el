@@ -120,6 +120,7 @@
 
 (use-package perspective
   :ensure t
+  
   :init
   (persp-mode 1)
   ;; (+config/workspace-new "main")

@@ -1,71 +1,92 @@
-;; (use-package vertico-flat
-;; 	:after vertico
-;; 	:config
-;; 	(vertico-flat-mode))
+(use-package vertico-flat
+  :ensure t
+  :after vertico
+  )
 
 (use-package vertico
-	:ensure t
-	:custom
-	(vertico-count 15)
+  :ensure t
+  
+  :custom
+  (vertico-count 15)
   (vertico-resize t)
   (vertico-cycle nil)
-	:config
-	(vertico-mode))
+  :config
+  (vertico-mode))
 
-;; (use-package vertico-posframe
-;; 	:ensure t
-;; 	:config
-;; 	(vertico-posframe-mode 1)
-;;   )
+(defun config/posframe-poshandler (info)
+  "My own posframe poshandler"
+  (let* ((frame-width (plist-get info :parent-frame-width))
+		 (frame-height (plist-get info :parent-frame-height))
+		 (posframe-width (plist-get info :posframe-width))
+		 (posframe-height (plist-get info :posframe-height)))
+	(cons (/ (- frame-width posframe-width) 2)
+		  (/ (* (- frame-height posframe-height) 4) 5))))
+
+(use-package vertico-posframe
+  :ensure t
+  
+  :after vertico
+  :custom
+  (vertico-posframe-poshandler #'config/posframe-poshandler)
+  (vertico-posframe-width 100)
+  (vertico-posframe-height 15)
+  (vertico-posframe-border-width 5)
+  :config
+  (vertico-posframe-mode 1))
 
 (defun config/search-buffer ()
   "Search the current buffer using `consult-line`."
   (interactive)
-	(let (start end multiline-p)
-		(save-restriction
-			(when (region-active-p)
-				(setq start (region-beginning)
-							end   (region-end)
-							multiline-p (/= (line-number-at-pos start)
-															(line-number-at-pos end)))
-				(deactivate-mark)
-				(when multiline-p
-					(narrow-to-region start end)))
-			(if (and start end (not multiline-p))
-					(consult-line
-                  (replace-regexp-in-string
-                   " " "\\\\ "
-                   (doom-pcre-quote
-                    (buffer-substring-no-properties start end))))
-				(call-interactively #'consult-line)))))
+  (let (start end multiline-p)
+	(save-restriction
+	  (when (region-active-p)
+	  (setq start (region-beginning)
+		  end   (region-end)
+		  multiline-p (/= (line-number-at-pos start)
+						(line-number-at-pos end)))
+	  (deactivate-mark)
+	  (when multiline-p
+	  (narrow-to-region start end)))
+	  (if (and start end (not multiline-p))
+		(consult-line
+         (replace-regexp-in-string
+          " " "\\\\ "
+          (doom-pcre-quote
+           (buffer-substring-no-properties start end))))
+	  (call-interactively #'consult-line)))))
 
 (use-package consult
-	:ensure t
-	:general
-	(config/leader-def
-		:states 'normal
-		"s s" '(config/search-buffer :wk "Search Buffer")
-    "s a" '(consult-ripgrep      :wl "Search All")))
+  :ensure t
+  
+  :general
+  (config/leader-def
+	:states 'normal
+	"s s" '(config/search-buffer :wk "Search Buffer")
+	"s a" '(consult-ripgrep      :wl "Search All")))
 
 (use-package vertico-mouse
-	:after vertico
-	:config
-	(vertico-mouse-mode))
+  :after vertico
+  
+  :config
+  (vertico-mouse-mode))
 
 (use-package savehist
-	:after vertico
-	:init
-	(savehist-mode))
+  :after vertico
+  
+  :init
+  (savehist-mode))
 
 (use-package orderless
-	:ensure t
+  :ensure t
+  
   :custom
   (completion-styles '(orderless basic))
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package marginalia
-	:ensure t
+  :ensure t
+  
   :custom
   (marginalia-max-relative-age 0)
   (marginalia-align 'right)
@@ -73,16 +94,16 @@
   (marginalia-mode))
 
 (use-package all-the-icons-completion
-	:ensure t
-  :defer
+  :ensure t
+  
   :after (marginalia all-the-icons)
   :hook (marginalia-mode . #'all-the-icons-completion-marginalia-setup)
   :init
   (all-the-icons-completion-mode))
 
 (use-package emacs
-	:config
-	(context-menu-mode t)
-	(setq enable-recursive-minibuffers t
-	      read-extended-command-predicate #'command-completion-default-include-p
-	      minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)))
+  :config
+  (context-menu-mode t)
+  (setq enable-recursive-minibuffers t
+	    read-extended-command-predicate #'command-completion-default-include-p
+	    minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt)))

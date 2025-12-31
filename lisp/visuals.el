@@ -1,18 +1,25 @@
-(use-package pdf-tools :ensure t)
-(use-package tldr :ensure t)
+(use-package pdf-tools
+  :ensure t
+  )
+(use-package tldr
+  :ensure t
+  )
 
 (use-package yascroll
   :ensure t
+  
   :config
   (global-yascroll-bar-mode 1))
 
 (use-package spacious-padding
   :ensure t
+  
   :init ;; (spacious-padding-mode)
   )
 
 (use-package ligature
   :ensure t
+  
   :config
   (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
                                        "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
@@ -31,12 +38,14 @@
 
 (use-package keycast
   :ensure t
+  
   :config
   ;;(keycast-mode-line-mode)
   )
 
 (use-package writeroom-mode
   :ensure t
+  
   :general
   (config/leader-def
     "t z" '(writeroom-mode :wk "Local Zen Mode")
@@ -44,6 +53,7 @@
 
 (use-package solaire-mode
   :ensure t
+  
   :config
   (solaire-global-mode +1))
 
@@ -69,37 +79,46 @@
 
 (use-package which-key
   :ensure t
+  
   :config
   (which-key-mode))
 
 (use-package elcord
 	:ensure t
+  
 	:config
 	;; (elcord-mode)
   )
 
 (use-package rainbow-delimiters
 	:ensure t
+  
 	:hook ((prog-mode) . rainbow-delimiters-mode))
 
 (use-package all-the-icons
-	:ensure t
-	:if (display-graphic-p))
+  :ensure t
+  
+  :if (display-graphic-p))
 
 (use-package rainbow-mode
-	:ensure t)
+  :ensure t
+  )
+
 
 (use-package hl-todo
 	:ensure t
+  
 	:config
 	(global-hl-todo-mode))
 
 (use-package highlight-numbers
   :ensure t
+  
   :hook (prog-mode . highlight-numbers-mode))
 
 (use-package highlight-defined
   :ensure t
+  
   :hook (emacs-lisp-mode . highlight-defined-mode))
 
 (use-package highlight-quoted
@@ -107,10 +126,13 @@
   :hook (emacs-lisp-mode . highlight-quoted-mode))
 
 (use-package highlight-blocks
-  :ensure t)
-  ;; :hook (prog-mode . highlight-blocks-mode))
+  :ensure t
+  ;; :hook (prog-mode . highlight-blocks-mode)
+  )
 
-(use-package hl-line) ;;(prog-mode . hl-line-mode)
+(use-package hl-line
+  :ensure t
+  :hook (prog-mode . hl-line-mode))
 
 (use-package beacon
   :ensure t
@@ -128,34 +150,21 @@
   (indent-bars-treesit-support t)
   (indent-bars-no-descend-lists t)
   (indent-bars-treesit-ignore-blank-lines-types '("module"))
-  (indent-bars-treesit-wrap '((c argument_list parameter_list init_declarator parenthesized_expression)))
   (indent-bars-treesit-wrap
-   '((elisp
-      quote special_form function_definition)))
+   '((elisp quote special_form function_definition)
+	 (c argument_list parameter_list init_declarator parenthesized_expression)))
   :config
   ;; Styles
-  (setq
+  (setq-default
    indent-bars-color '(highlight :face-bg t :blend 0.15)
-   indent-bars-pattern "."
+   indent-bars-pattern ". . . ."
    indent-bars-width-frac 0.15
-   indent-bars-pad-frac 0.1
+   indent-bars-pad-frac 0.2
    indent-bars-zigzag nil
    indent-bars-color-by-depth '(:regexp "outline-\\([0-9]+\\)" :blend 1) ; blend=1: blend with BG only
    indent-bars-highlight-current-depth '(:blend 0.5) ; pump up the BG blend on current
    indent-bars-display-on-blank-lines t)
-  :hook ((v-mode
-          nix-mode
-          tuareg-mode
-          haskell-mode
-          lua-mode
-          d-mode
-          cmake-mode
-          emacs-lisp-mode
-          scheme-mode
-          haskell-mode
-          zig-mode
-          c-mode
-          c++-mode) . indent-bars-mode))
+  :hook ((prog-mode) . indent-bars-mode))
 
 ;; (use-package centaur-tabs
 ;;   :ensure t
@@ -239,51 +248,51 @@
 
 (use-package doom-modeline
   :ensure t
+  
   :init (doom-modeline-mode t)
   :config
-  (setq doom-modeline-height 50
+  (setq-default doom-modeline-height 50
         doom-modeline-bar-width 5
         doom-modeline-persp-name t
         doom-modeline-persp-icon t
         doom-modeline-total-line-number t))
 
-;; (use-package spaceline
-;;   :ensure t
-;;   :custom
-;;   :config
-;;   (require 'spaceline-config)
-;;   (spaceline-spacemacs-theme))
+(use-package nyan-mode
+  :ensure t
+  
+  :hook ((prog-mode text-mode) . nyan-mode)
+  :config
+  (setq-default nyan-animate-nyancat t)
+  (nyan-start-animation))
 
 (use-package screenshot
   :ensure '(:host github :repo "tecosaur/screenshot")
+  
   :after transient)
 
 (use-package zenburn-theme
-	:ensure t)
+  :ensure t
+  )
 
 (use-package gruber-darker-theme
   :ensure t
+  
   :config)
 
 (use-package gruvbox-theme
   :ensure t
+  
   :config)
-
 
 (use-package wildcharm-theme
   :ensure t
-  :init
-  ;; (load-theme 'wildcharm t)
-  :custom-face
-  ;; org header sizes
-  ;; (org-level-1 ((t (:height 1.6))))
-  ;; (org-level-2 ((t (:height 1.4))))
-  ;; (org-level-3 ((t (:height 1.2))))
-  ;; italic comments
-  (font-lock-comment-face ((t (:slant italic)))))
+  
+  :custom-face (font-lock-comment-face ((t (:slant italic)))))
 
 (use-package jetbrains-darcula-theme
-	:ensure t)
+  :ensure t
+  )
+
 (use-package doom-themes
   :ensure t
   :config

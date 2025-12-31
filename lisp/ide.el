@@ -7,6 +7,7 @@
 
 (use-package project
   :ensure nil
+  
   :config
   (defun project-root-p (path)
     "Check if the current PATH has any of the project root markers."
@@ -22,69 +23,72 @@
   (setq project-find-functions '(project-find-root)))
 
 (use-package emacs
-	:custom
-	(tab-always-indent 'complete)
+  :custom
+  (tab-always-indent 'complete)
   (text-mode-ispell-word-completion nil)
-	(read-extended-command-predicate #'command-completion-default-include-p))
+  (read-extended-command-predicate #'command-completion-default-include-p))
 
 (use-package glasses
-	;; :hook (prog-mode . glasses-mode)
-	:custom
-	(glasses-separator "_")
-	(glasses-separate-parentheses-p nil)
-	(glasses-uncapitalize-p nil)
-	:general
-	(config/leader-def
-		:states 'normal
-		"t g" '(glasses-mode :wk "Toggles glasses-mode.")))
+  :ensure nil
+  :custom
+  (glasses-separator "_")
+  (glasses-separate-parentheses-p nil)
+  (glasses-uncapitalize-p nil)
+  :general
+  (config/leader-def
+	:states 'normal
+	"t g" '(glasses-mode :wk "Toggles glasses-mode.")))
+
+(use-package consult-lsp
+  :ensure t
+  
+  :general
+  (config/leader-def
+	:states 'normal
+	"l s" '(consult-lsp-file-symbols     :wk "Search File Symbols")
+	"l S" '(consult-lsp-symbols          :wk "Search Project Symbols")
+	"l d" '(consult-lsp-file-diagnostics :wk "Search File Diagnostics")
+	"l D" '(consult-lsp-diagnostics      :wk "Search File Diagnostics")))
 
 (use-package lsp-mode
   :ensure t
-  :hook (((zig-mode
-           haskell-mode
+  
+  :hook (((haskell-mode
            web-mode
+		   zig-mode
            ;; java-mode
            ;; c++-mode
+           ;; svelte-mode
+           web-mode
            c-mode
            rust-mode
            go-mode
            python-mode
            js-mode
-           typescript-mode
-           ) . config/activate-lsp))
+           typescript-mode) . config/activate-lsp))
   :commands (lsp lsp-deferred)
   :init
   (setq lsp-keymap-prefix "C-c l"
         lsp-headerline-breadcrumb-enable t
         lsp-log-io nil)
   :config
-  (setq-default lsp-odin-ols-binary-path "ols"
-        lsp-odin-ols-server-dir "ols")
   (add-to-list 'exec-path "/home/hesham/.local/bin")
+  (setq-default lsp-odin-ols-binary-path "ols"
+				lsp-odin-ols-server-dir "ols")
   (setq lsp-headerline-breadcrumb-enable nil ; Disable breadcrumb by default
-        lsp-log-io nil      ; Disable logging (set to t for debugging)
+		lsp-log-io nil      ; Disable logging (set to t for debugging)
         lsp-enable-snippet t
         lsp-idle-delay 0.500            ; Update delay (seconds)
         lsp-completion-provider :company
         lsp-auto-guess-root t
         lsp-keep-workspace-alive nil
         lsp-enable-symbol-highlighting nil
-        lsp-enable-on-type-formatting t)
+        lsp-enable-on-type-formatting nil
+		lsp-format-buffer-on-save nil)
 
   (setq lsp-clients-lua-language-server-bin "/usr/bin/lua-language-server"
         lsp-clients-lua-language-server-main-location "/usr/lib/lua-language-server/main.lua")
-  ;; (setq lsp-lua-workspace-library
-  ;;       (list (expand-file-name "~/.config/love-api")))
 
-  
-  ;; Performance tuning
-  (setq gc-cons-threshold (* 100000000 4))     ; 100MB
-  (setq read-process-output-max (* 1024 1024)) ; 1MB
-  ;; (setq lsp-use-plists t)
-  ;; :general
-  ;; (:keymaps 'lsp-mode-map
-  ;;           :state 'normal
-  ;;           "K" '(lsp-describe-thing-at-point :wk "Describe"))
   :general
   (config/leader-def
     "l a" '(lsp-execute-code-action :wk "Code Actions")
@@ -92,27 +96,9 @@
     "l R" '(lsp-restart-workspace :wk "Restart workspace")
     "l f" '(lsp-format-buffer :wl "Format Buffer")))
 
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :after lsp-mode
-;;   :commands lsp-ui-mode
-;;   :config
-;;   (setq lsp-ui-doc-enable t
-;;         lsp-ui-doc-position 'at-point  ; top, bottom, or at-point
-;;         lsp-ui-doc-show-with-cursor t
-;;         lsp-ui-sideline-enable t
-;;         lsp-ui-sideline-show-hover t
-;;         lsp-ui-sideline-show-diagnostics t
-;;         lsp-ui-sideline-show-code-actions t
-;;         lsp-ui-imenu-enable t
-;;         lsp-ui-peek-enable t)
-;;   :general
-;;   ;; Bind S-k to show hover
-;;   (:states '(normal insert)
-;;            :keymaps 'lsp-mode-map
-;;            "K" 'lsp-ui-doc-glance))
 (use-package lsp-ui
   :ensure t
+  
   :after lsp-mode
   :commands lsp-ui-mode
   :hook (lsp-mode . lsp-ui-mode)
@@ -130,28 +116,33 @@
 
 (use-package company-box
   :ensure t
+  
   :config
   :hook (company-mode . company-box-mode))
+
 (use-package company
   :ensure t
+  
   :hook (prog-mode . company-mode)
   :config
   (setq company-idle-delay 0.1
         company-minimum-prefix-length 1))
-  ;; (global-set-key (kbd "C-SPC") 'company-complete))
 
 (use-package flycheck
   :ensure t
+  
   :hook (lsp-mode . flycheck-mode))
 
 (use-package dap-mode
   :ensure t
+  
   :after lsp-mode
   :config
   (dap-auto-configure-mode))
 
 (use-package yasnippet
   :ensure t
+  
   :config
   (yas-global-mode 1))
 
@@ -162,8 +153,9 @@
 
 (use-package tree-sitter
   :ensure t
-  :hook (((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode c-mode c++-mode js-mode typescript-mode) . tree-sitter-mode)
-         ((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode c-mode c++-mode js-mode typescript-mode) . tree-sitter-hl-mode)
+  
+  :hook (((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode js-mode typescript-mode c-mode) . tree-sitter-mode)
+         ((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode js-mode typescript-mode c-mode) . tree-sitter-hl-mode)
          ((emacs-lisp-mode) . (lambda () (config/treesit-parser-for-lang-mode 'elisp))))
   :config
   (setq-default treesit-language-source-alist
@@ -195,7 +187,8 @@
   :after tree-sitter)
 
 (use-package ebnf-mode
-	:ensure t)
+  :ensure t
+  )
 
 (use-package paredit
   :ensure t
@@ -204,14 +197,6 @@
 (use-package eros
   :ensure t
   :hook (emacs-lisp-mode . eros-mode))
-
-(use-package fancy-compilation
-  :ensure t
-  :custom
-  (fancy-compilation-quiet-prolog nil)
-  :config
-  ;;(fancy-compilation-mode)
-  )
 
 (use-package compile
   :ensure nil
@@ -270,73 +255,112 @@
 
 (use-package v-mode
   :ensure t
+  
   :mode ("\\(\\.v?v\\|\\.vsh\\)$" . 'v-mode))
 
 (use-package odin-mode
   :ensure '(:host github :repo "mattt-b/odin-mode")
+  
   :hook (odin-mode . lsp))
 
 (use-package qbe-mode
-  :ensure '(:host github :repo "mbknust/qbe-mode"))
+  :ensure '(:host github :repo "mbknust/qbe-mode")
+  )
+
+(use-package ada-mode
+  :ensure '(:host github
+				  :repo "tkurtbond/old-ada-mode"
+				  :source "Github"
+				  :branch "main")
+  )
 
 (use-package c3-ts-mode
   :ensure '(:host github :repo "c3lang/c3-ts-mode")
+  
   ;; :hook (c3-ts-mode . lsp)
   )
 
 (use-package nix-mode
-	:ensure t
-	:mode "\\.nix\\'")
+  :ensure t
+  
+  :mode "\\.nix\\'")
 
 (use-package elixir-mode
-  :ensure t)
+  :ensure t
+  )
 
 (use-package haskell-mode
-  :ensure t)
+  :ensure t
+  )
 (use-package lsp-haskell
-  :ensure t)
+  :ensure t
+  )
 
 (use-package wren-mode
-  :ensure t)
+  :ensure t
+  )
 
 (use-package lua-mode
   :ensure t
+  
   :hook (lua-mode . lsp))
 
 (use-package zig-mode
-  :ensure t)
+  :ensure t
+  )
 
 (use-package rust-mode
-  :ensure t)
+  :ensure t
+  )
 
 (use-package go-mode
   :ensure t
+  
   :hook (go-mode . tree-sitter-hl-mode))
 
 (use-package cmake-mode
-  :ensure t)
+  :ensure t
+  )
 
 (use-package d-mode
-  :ensure t)
+  :ensure t
+  )
 
 (use-package typescript-mode
-  :ensure t)
+  :ensure t
+  )
 
 (use-package web-mode
-  :ensure t)
+  :ensure t
+  
+  :mode ("\\.svelte\\'" . web-mode)
+  :config
+  (setq-default web-mode-script-padding 0))
 
 (use-package nim-mode
-  :ensure t)
+  :ensure t
+  )
 
 (use-package forth-mode
-  :ensure t)
+  :ensure t
+  )
+
+(use-package glsl-mode
+  :ensure t
+  )
 
 (use-package lsp-pyright
   :ensure t
+  
   :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                          (lsp))))
 
 (use-package clojure-mode
-             :ensure t)
+  :ensure t
+  )
+
+(use-package fennel-mode
+  :ensure t
+  )
