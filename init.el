@@ -1,3 +1,5 @@
+(setenv "LSP_USE_PLISTS" "true")
+
 (defun config/load-all (root &rest names)
   (unless (stringp root)
 	(error "Root is exepected to be a string"))
@@ -26,6 +28,7 @@
 (config/load-all
  "lisp"
  "emacs-options.el"
+ "functions.el"
  "bootstrap.el"
  "keybindings.el"
  "completions.el"
@@ -37,9 +40,42 @@
  "visuals.el"
  "ide.el"
  "org-mode-config.el"
- "git-integration.el")
+ "git-integration.el"
+ "vibe.el"
+ "mode-line.el")
 
-(load-theme 'doom-rose-pine-moon t)
+(load-theme 'kaolin-dark t)
+
+(defun lsp-booster--advice-json-parse (old-fn &rest args)
+  "Try to parse bytecode instead of json."
+  (or
+   (when (equal (following-char) ?#)
+     (let ((bytecode (read (current-buffer))))
+       (when (byte-code-function-p bytecode)
+         (funcall bytecode))))
+   (apply old-fn args)))
+(advice-add (if (progn (require 'json)
+                       (fboundp 'json-parse-buffer))
+                'json-parse-buffer
+              'json-read)
+            :around
+            #'lsp-booster--advice-json-parse)
+
+(defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+  "Prepend emacs-lsp-booster command to lsp CMD."
+  (let ((orig-result (funcall old-fn cmd test?)))
+    (if (and (not test?)                             ;; for check lsp-server-present?
+             (not (file-remote-p default-directory)) ;; see lsp-resolve-final-command, it would add extra shell wrapper
+             lsp-use-plists
+             (not (functionp 'json-rpc-connection))  ;; native json-rpc
+             (executable-find "emacs-lsp-booster"))
+        (progn
+          (when-let ((command-from-exec-path (executable-find (car orig-result))))  ;; resolve command from exec-path (in case not found in $PATH)
+            (setcar orig-result command-from-exec-path))
+          (message "Using emacs-lsp-booster for %s!" orig-result)
+          (cons "emacs-lsp-booster" orig-result))
+      orig-result)))
+(advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 
 (setq-default c-style-alist '(("gnu" (c-basic-offset . 2) (c-comment-only-line-offset 0 . 0)
 							   (c-hanging-braces-alist (substatement-open before after)
@@ -74,9 +110,42 @@
 (config/load-all
  "modes"
  "haste-mode.el"
- "llvm-mode.el")
+ "llvm-mode.el"
+ "simpc-mode.el"
+ "hare-mode.el"
+ "c-call-hl-mode.el"
+ "my-shit-keyboard-fix-mode.el")
+
+(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
+
+(defun config/hook-c-highlight (&rest mode-hooks)
+  ""
+  (dolist (hook mode-hooks)
+	(add-hook hook #'c-call-hl-mode)))
+
+(defun config/hook-shit (&rest mode-hooks)
+  ""
+  (dolist (hook mode-hooks)
+	(add-hook hook #'my-shit-keyboard-fix-mode)))
+
+(config/hook-c-highlight
+ 'simpc-mode-hook
+ 'c-mode-hook
+ 'c++-mode-hook
+ 'rust-mode-hook
+ 'haste-mode-hook
+ 'java-mode-hook
+ 'hare-mode-hook)
+
+(config/hook-shit
+ ;; 'simpc-mode-hook
+ 'c-mode-hook
+ 'c++-mode-hook)
 
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; (add-to-list 'auto-mode-alist '("\\.ixx\\'" . c++-mode))
+;; (add-to-list 'auto-mode-alist '("\\.cppm\\'" . c++-mode))
 
 (when (and custom-file (file-exists-p custom-file))
   (load custom-file))

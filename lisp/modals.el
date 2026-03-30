@@ -1,22 +1,22 @@
-
 (use-package drag-stuff
   :ensure t
-  
   :config
   (drag-stuff-global-mode 1)
   (drag-stuff-define-keys))
 
 (use-package subword
-  
-  :hook
-  (prog-mode . subword-mode)
+  :ensure nil
+  ;; :hook
+  ;; (prog-mode . subword-mode)
   :general
   (config/leader-def
 	:states 'normal
 	"t s" '(subword-mode   :wk "Toggle subword-mode")))
 
 (use-package superword
-  
+  :ensure nil
+  :hook
+  (prog-mode . superword-mode)
   :general
   (config/leader-def
 	:states 'normal
@@ -24,7 +24,6 @@
 
 (use-package evil-goggles
   :ensure t
-  
   :after evil
   :config
   (evil-goggles-mode)
@@ -53,7 +52,6 @@
 
 (use-package evil-exchange
   :ensure t
-  
   :after evil
   :config
   (evil-exchange-install))
@@ -73,11 +71,9 @@
 
 (use-package helix
   :ensure t
-  
   :config)
 
 (use-package god-mode
   :ensure t
-  
   :commands (god-all-mode god-mode))
 

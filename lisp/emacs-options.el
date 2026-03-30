@@ -1,4 +1,4 @@
-(indent-tabs-mode)
+;; (indent-tabs-mode)
 (setq-default
  ;; Editor Tweaks
  gc-cons-threshold 50000000
@@ -50,18 +50,37 @@
   (set-fontset-font t 'arabic
                     (font-spec :family "Amiri" :size 16)))
 
+(defun config/get-font-size ()
+  "Returns the current font size"
+  (face-attribute 'default :height))
+
+(defun config/set-font-size (font-size)
+  "Set the font size."
+  (interactive
+   (list
+	(read-number (format "Font Size (currently %d): " (config/get-font-size)))))
+  (let ((font-family "0xProto Nerd Font Mono"))
+	(set-face-attribute 'fixed-pitch nil
+						:font font-family
+						:height font-size)
+	(set-face-attribute 'default nil
+						:font font-family
+						:height font-size)
+	(set-face-attribute 'variable-pitch nil
+						:font font-family
+						:height font-size)
+	(set-face-attribute 'font-lock-comment-face nil
+						:slant 'italic)
+	(set-face-attribute 'font-lock-keyword-face nil
+						:slant 'italic)
+	(set-fontset-font t 'arabic
+					  (font-spec :family "Amiri" :size 16))))
+
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (recentf-mode 1)
 (global-auto-revert-mode 1)
-
-(add-hook #'prog-mode-hook
-		  (lambda ()
-			(interactive)
-			(display-line-numbers-mode)
-			(setq-local indent-tabs-mode t)
-			(setq-local tab-width 4)))
 
 (setq-default c-basic-offset tab-width
               cperl-indent-level tab-width
@@ -77,7 +96,11 @@
               ada-when-indent tab-width
               ada-with-indent tab-width
               ada-label-indent (- tab-width)
-              )
+              hare-mode-indent-offset tab-width)
+(add-hook #'prog-mode-hook
+          (lambda ()
+            (interactive)
+            (display-line-numbers-mode)))
 
 (defalias (intern "toggle-read-only")
   `(lambda () (interactive) (read-only-mode)))

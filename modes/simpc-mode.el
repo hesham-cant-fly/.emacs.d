@@ -3,9 +3,14 @@
 (defvar simpc-mode-syntax-table
   (let ((table (make-syntax-table)))
     ;; C/C++ style comments
-	(modify-syntax-entry ?/ ". 124b" table)
-	(modify-syntax-entry ?* ". 23" table)
-	(modify-syntax-entry ?\n "> b" table)
+    (modify-syntax-entry ?/ ". 124b" table)
+    (modify-syntax-entry ?* ". 23" table)
+    (modify-syntax-entry ?\n "> b" table)
+
+	;; Word
+	(modify-syntax-entry ?_ "w" table)
+	(modify-syntax-entry ?$ "w" table)
+
     ;; Preprocessor stuff?
     (modify-syntax-entry ?# "." table)
     ;; Chars are the same as strings
@@ -24,7 +29,7 @@
     "char16_t" "char32_t" "char8_t"
     "int8_t" "uint8_t" "int16_t" "uint16_t" "int32_t" "uint32_t" "int64_t" "uint64_t"
     "uintptr_t"
-    "size_t"
+    "size_t" "ptrdiff_t"
     "va_list"))
 
 (defun simpc-keywords ()
@@ -48,6 +53,7 @@
    `("# *[#a-zA-Z0-9_]+" . font-lock-preprocessor-face)
    `("# *include\\(?:_next\\)?\\s-+\\(\\(<\\|\"\\).*\\(>\\|\"\\)\\)" . (1 font-lock-string-face))
    `("\\(?:enum\\|struct\\)\\s-+\\([a-zA-Z0-9_]+\\)" . (1 font-lock-type-face))
+	 `("@\\([[:word:]]+\\)" . (0 font-lock-keyword-face))
    `(,(regexp-opt (simpc-keywords) 'symbols) . font-lock-keyword-face)
    `(,(regexp-opt (simpc-types) 'symbols) . font-lock-type-face)))
 
@@ -85,7 +91,7 @@
   (let ((prev (simpc--previous-non-empty-line)))
     (if (not prev)
         (current-indentation)
-      (let ((indent-len 4)
+      (let ((indent-len tab-width)
             (cur-line (string-trim-right (thing-at-point 'line t)))
             (prev-line (string-trim-right (car prev)))
             (prev-indent (cdr prev)))

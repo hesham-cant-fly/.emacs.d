@@ -1,10 +1,12 @@
 (eval-when-compile
-  (require 'rx))
+  (require 'rx)
+  (require 'js))
 
 (defconst haste--font-lock-defaults
   (let ((keywords
 		 '("interface" "struct" "enum" "variant" "error"
 		   "import" "use"
+		   "distinct"
 		   "var" "const" "func"
 		   "loop" "for" "while" "skip" "stop"
 		   "return" "defer" "errdefer" "okdefer"
@@ -69,32 +71,34 @@
 
 (defun haste-indent-line ()
   "Indent current line."
-  (let (indent
-		boi-p                           ;begin of indent
-		move-eol-p
-		(point (point)))                ;lisps-2 are truly wonderful
-	(save-excursion
-	  (back-to-indentation)
-	  (setq indent (car (syntax-ppss))
-		  boi-p (= point (point)))
-	  ;; don't indent empty lines if they don't have the in it
-	  (when (and (eq (char-after) ?\n)
-			   (not boi-p))
-	  (setq indent 0))
-	  ;; check whether we want to move to the end of line
-	  (when boi-p
-	  (setq move-eol-p t))
-	  ;; decrement the indent if the first character on the line is a
-	  ;; closer.
-	  (when (or (eq (char-after) ?\))
-			  (eq (char-after) ?\}))
-	  (setq indent (1- indent)))
-	  ;; indent the line
-	  (delete-region (line-beginning-position)
-				   (point))
-	  (indent-to (* tab-width indent)))
-	(when move-eol-p
-	  (move-end-of-line nil))))
+  (js-indent-line)
+  ;; (let (indent
+  ;; 		boi-p                           ;begin of indent
+  ;; 		move-eol-p
+  ;; 		(point (point)))                ;lisps-2 are truly wonderful
+  ;; 	(save-excursion
+  ;; 	  (back-to-indentation)
+  ;; 	  (setq indent (car (syntax-ppss))
+  ;; 		  boi-p (= point (point)))
+  ;; 	  ;; don't indent empty lines if they don't have the in it
+  ;; 	  (when (and (eq (char-after) ?\n)
+  ;; 			   (not boi-p))
+  ;; 	  (setq indent 0))
+  ;; 	  ;; check whether we want to move to the end of line
+  ;; 	  (when boi-p
+  ;; 	  (setq move-eol-p t))
+  ;; 	  ;; decrement the indent if the first character on the line is a
+  ;; 	  ;; closer.
+  ;; 	  (when (or (eq (char-after) ?\))
+  ;; 			  (eq (char-after) ?\}))
+  ;; 	  (setq indent (1- indent)))
+  ;; 	  ;; indent the line
+  ;; 	  (delete-region (line-beginning-position)
+  ;; 				   (point))
+  ;; 	  (indent-to (* tab-width indent)))
+  ;; 	(when move-eol-p
+  ;; 	  (move-end-of-line nil)))
+  )
 
 
 (defvar haste-mode-abbrev-table nil

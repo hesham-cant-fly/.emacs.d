@@ -24,8 +24,8 @@
 	"s" '(:ignore t :wk "Search"))
 
   (config/leader-def
-	:states 'normal
-	"w" (general-simulate-key "C-w"))
+	"w" (general-simulate-key "C-w")
+	"x" (general-simulate-key "M-x"))
 
   ;; Files
   (config/leader-def

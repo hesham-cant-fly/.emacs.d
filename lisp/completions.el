@@ -1,7 +1,6 @@
 (use-package vertico-flat
   :ensure t
-  :after vertico
-  )
+  :after vertico)
 
 (use-package vertico
   :ensure t
@@ -30,7 +29,7 @@
   (vertico-posframe-poshandler #'config/posframe-poshandler)
   (vertico-posframe-width 100)
   (vertico-posframe-height 15)
-  (vertico-posframe-border-width 5)
+  (vertico-posframe-border-width 2)
   :config
   (vertico-posframe-mode 1))
 

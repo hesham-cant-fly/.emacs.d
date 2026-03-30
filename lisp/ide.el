@@ -1,6 +1,7 @@
 
 (defcustom project-root-markers
-  '("Cargo.toml" ".git" ".project" ".projectile")
+  '("Cargo.toml" ".git" ".projectile")
+  ;; '("Cargo.toml" ".git" ".project" ".projectile")
   "Files or directories that indicate the root of a project."
   :type '(repeat string)
   :group 'project)
@@ -56,8 +57,7 @@
   :hook (((haskell-mode
            web-mode
 		   zig-mode
-           ;; java-mode
-           ;; c++-mode
+           c++-mode
            ;; svelte-mode
            web-mode
            c-mode
@@ -65,7 +65,8 @@
            go-mode
            python-mode
            js-mode
-           typescript-mode) . config/activate-lsp))
+           typescript-mode
+		   jai-mode) . config/activate-lsp))
   :commands (lsp lsp-deferred)
   :init
   (setq lsp-keymap-prefix "C-c l"
@@ -79,6 +80,7 @@
 		lsp-log-io nil      ; Disable logging (set to t for debugging)
         lsp-enable-snippet t
         lsp-idle-delay 0.500            ; Update delay (seconds)
+		lsp-copilot-enabled t
         lsp-completion-provider :company
         lsp-auto-guess-root t
         lsp-keep-workspace-alive nil
@@ -88,6 +90,12 @@
 
   (setq lsp-clients-lua-language-server-bin "/usr/bin/lua-language-server"
         lsp-clients-lua-language-server-main-location "/usr/lib/lua-language-server/main.lua")
+  (lsp-register-client
+   (make-lsp-client
+	:new-connection (lsp-stdio-connection '("/home/hesham/jai/jails/bin/jails"))
+	:activation-fn (lsp-activate-on "jai")
+	:server-id 'jails))
+  (add-to-list 'lsp-language-id-configuration '(jai-mode . "jai"))
 
   :general
   (config/leader-def
@@ -138,7 +146,11 @@
   
   :after lsp-mode
   :config
-  (dap-auto-configure-mode))
+  (dap-auto-configure-mode)
+  (require 'dap-lldb)
+
+  (setq dap-lldb-debug-program "/usr/bin/lldb-dap")
+  )
 
 (use-package yasnippet
   :ensure t
@@ -154,9 +166,9 @@
 (use-package tree-sitter
   :ensure t
   
-  :hook (((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode js-mode typescript-mode c-mode) . tree-sitter-mode)
-         ((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode js-mode typescript-mode c-mode) . tree-sitter-hl-mode)
-         ((emacs-lisp-mode) . (lambda () (config/treesit-parser-for-lang-mode 'elisp))))
+  ;; :hook (((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode js-mode typescript-mode c-mode) . tree-sitter-mode)
+  ;;        ((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode js-mode typescript-mode c-mode) . tree-sitter-hl-mode)
+  ;;        ((emacs-lisp-mode) . (lambda () (config/treesit-parser-for-lang-mode 'elisp))))
   :config
   (setq-default treesit-language-source-alist
                 '((bash "https://github.com/tree-sitter/tree-sitter-bash")
@@ -187,8 +199,7 @@
   :after tree-sitter)
 
 (use-package ebnf-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package paredit
   :ensure t
@@ -209,27 +220,18 @@
     "c c" '(compile          :wk "Open Compilation Mode")
     "c r" '(recompile        :wk "Recompile"))
   :custom
-  (compilation-scroll-output 'first-error)
   (compilation-ask-about-save t)
   (compilation-always-kill t)
-  (compilation-scroll-output t)
+  (compilation-scroll-output 'first-error)
+  (compilation-max-output-line-length nil)
   (compilation-read-command t)
   :config
   (require 'ansi-color)
   (defun colorize-compilation-buffer ()
-    (toggle-read-only)
-    (ansi-color-apply-on-region compilation-filter-start (point))
-    (toggle-read-only))
+	"Make the compilation buffer looks as intended."
+	(with-read-only
+	 (ansi-color-apply-on-region compilation-filter-start (point))))
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-
-  (defun config/jump-to-first-error (buffer status)
-    "Move point to the first error in the compilation buffer if any."
-    (interactive)
-    (when (buffer-live-p buffer)
-      (with-current-buffer buffer
-        (ignore-errors
-          (first-error)))))
-  (add-hook 'compilation-finish-functions #'config/jump-to-first-error)
 
   (add-to-list 'display-buffer-alist
                '("\\*compilation\\*"
@@ -253,9 +255,18 @@
   (local-set-key (kbd "n") #'next-error)
   (local-set-key (kbd "p") #'previous-error))
 
+(use-package poporg
+  :ensure t
+  :config
+  (config/leader-def
+	"o p" '(poporg-dwim :wk "Poporg DWIM"))
+  (config/local-leader-def
+	:keymaps 'poporg-mode-map
+	"s" '(poporg-update :wk "Update The Original Buffer")
+	"q" '(poporg-edit-exit :wk "Save & Quit Poporg")))
+
 (use-package v-mode
   :ensure t
-  
   :mode ("\\(\\.v?v\\|\\.vsh\\)$" . 'v-mode))
 
 (use-package odin-mode
@@ -275,10 +286,7 @@
   )
 
 (use-package c3-ts-mode
-  :ensure '(:host github :repo "c3lang/c3-ts-mode")
-  
-  ;; :hook (c3-ts-mode . lsp)
-  )
+  :ensure '(:host github :repo "c3lang/c3-ts-mode"))
 
 (use-package nix-mode
   :ensure t
@@ -332,7 +340,6 @@
 
 (use-package web-mode
   :ensure t
-  
   :mode ("\\.svelte\\'" . web-mode)
   :config
   (setq-default web-mode-script-padding 0))
@@ -358,9 +365,31 @@
                          (lsp))))
 
 (use-package clojure-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package fennel-mode
+  :ensure t)
+
+(use-package lsp-scheme
   :ensure t
+  :after lsp-mode
+  :init
+  (setq lsp-scheme-implementation "chicken")
+  (add-hook 'scheme-mode-hook #'lsp-scheme))
+
+(use-package lsp-java
+  :ensure t
+  :config
+  (add-hook 'java-mode-hook #'lsp)
+  (setq lsp-java-inlay-hints-parameter-names-enabled t)
+  (setq lsp-java-imports-gradle-wrapper-checksums
+		[ (:sha256 "b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13" :allowed t)])
+  ;; (setq lsp-java-vmargs '("-Xmx4G" "-Xms1G" "-XX:+UseParallelGC"))
+  ;; (setq lsp-java-vmargs '("-XX:+UseParallelGC"))
+  (setq lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
+						  "-XX:AdaptiveSizePolicyWeight=90"
+						  "-Dsun.zip.disableMemoryMapping=true"
+						  "-Xmx3G"
+						  "-Xms100m"))
   )
+

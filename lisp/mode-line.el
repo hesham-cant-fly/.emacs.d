@@ -16,7 +16,9 @@
 				  (:eval (config/get-custom-evil-mode-line-tag))
 				  (:eval (config/get-custom-modeline-buffer-name))
 				  (:eval (config/get-current-major-mode))
-				  "%I:%c:%l"
+				  "%I %c:%l"
+				  " "
+				  (:eval (nyan-create))
 				  )))
 
 (defun config/deactivate-custom-mode-line ()
@@ -42,7 +44,7 @@
 	  (symbol-name)
 	  (capitalize)
 	  (propertize 'face 'bold)
-	  (config/string-prepend "λ")
+	  (config/string-prepend "λ ")
 	  (config/wrap-in-space)))
 
 (defface config/normal-mode-face
