@@ -13,7 +13,8 @@
  '(package-selected-packages
    '(clojure-mode clojure-ts-mode dart-mode dockerfile-mode ef-themes
 				  scala-mode smalltalk-mode spacemacs-theme
-				  spacious-padding tuareg yaml-mode zig-mode)))
+				  spacious-padding subatomic-theme tuareg yaml-mode
+				  zig-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

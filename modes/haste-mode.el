@@ -16,9 +16,10 @@
 		   "in" "is" "or" "and" "not"
 		   "inline" "async"
 		   "try" "catch"
-		   "cast" "transmute"
+		   "const_cast" "cast" "transmute"
 		   "context" "undefined" "null" "true" "false"
 		   "dynamic" "auto"
+		   "static"
 		   )
 		 )
 		(types

@@ -29,6 +29,15 @@
   (text-mode-ispell-word-completion nil)
   (read-extended-command-predicate #'command-completion-default-include-p))
 
+(use-package envrc
+  :ensure t
+  :hook (after-init . envrc-global-mode))
+
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+
 (use-package glasses
   :ensure nil
   :custom
@@ -51,76 +60,92 @@
 	"l d" '(consult-lsp-file-diagnostics :wk "Search File Diagnostics")
 	"l D" '(consult-lsp-diagnostics      :wk "Search File Diagnostics")))
 
-(use-package lsp-mode
-  :ensure t
-  
-  :hook (((haskell-mode
-           web-mode
-		   zig-mode
-           c++-mode
-           ;; svelte-mode
-           web-mode
-           c-mode
-           rust-mode
-           go-mode
-           python-mode
-           js-mode
-           typescript-mode
-		   jai-mode) . config/activate-lsp))
-  :commands (lsp lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l"
-        lsp-headerline-breadcrumb-enable t
-        lsp-log-io nil)
+(use-package eglot
+  :ensure nil
+  :hook ((simpc-mode
+		  clojure-mode
+		  clojurescript-mode) . config/activate-lsp)
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-events-buffer-size 2000000)
   :config
-  (add-to-list 'exec-path "/home/hesham/.local/bin")
-  (setq-default lsp-odin-ols-binary-path "ols"
-				lsp-odin-ols-server-dir "ols")
-  (setq lsp-headerline-breadcrumb-enable nil ; Disable breadcrumb by default
-		lsp-log-io nil      ; Disable logging (set to t for debugging)
-        lsp-enable-snippet t
-        lsp-idle-delay 0.500            ; Update delay (seconds)
-		lsp-copilot-enabled t
-        lsp-completion-provider :company
-        lsp-auto-guess-root t
-        lsp-keep-workspace-alive nil
-        lsp-enable-symbol-highlighting nil
-        lsp-enable-on-type-formatting nil
-		lsp-format-buffer-on-save nil)
-
-  (setq lsp-clients-lua-language-server-bin "/usr/bin/lua-language-server"
-        lsp-clients-lua-language-server-main-location "/usr/lib/lua-language-server/main.lua")
-  (lsp-register-client
-   (make-lsp-client
-	:new-connection (lsp-stdio-connection '("/home/hesham/jai/jails/bin/jails"))
-	:activation-fn (lsp-activate-on "jai")
-	:server-id 'jails))
-  (add-to-list 'lsp-language-id-configuration '(jai-mode . "jai"))
-
-  :general
+  (add-to-list 'eglot-server-programs
+			   '((simpc-mode) . ("clangd" "--header-insertion=never")))
   (config/leader-def
-    "l a" '(lsp-execute-code-action :wk "Code Actions")
-    "l r" '(lsp-rename :wk "Rename")
-    "l R" '(lsp-restart-workspace :wk "Restart workspace")
-    "l f" '(lsp-format-buffer :wl "Format Buffer")))
+    "l a" '(eglot-code-actions :wk "Code Actions")
+    "l r" '(eglot-rename :wk "Rename")
+    "l R" '(eglot-reconnect :wk "Restart workspace")))
 
-(use-package lsp-ui
-  :ensure t
+;; (use-package lsp-mode
+;;   :ensure t
   
-  :after lsp-mode
-  :commands lsp-ui-mode
-  :hook (lsp-mode . lsp-ui-mode)
-  :config
-  ;; Disable auto popup
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-show-with-cursor nil
-        lsp-ui-doc-show-with-mouse nil
-        lsp-ui-doc-position 'at-point)
-  :general
-  ;; Bind S-k to show hover
-  (:states '(normal)
-           :keymaps 'lsp-mode-map
-           "K" 'lsp-ui-doc-toggle))
+;;   :hook (((haskell-mode
+;;            web-mode
+;; 		   zig-mode
+;;            c++-mode
+;;            ;; svelte-mode
+;;            web-mode
+;;            c-mode
+;; 		   simpc-mode
+;;            rust-mode
+;;            go-mode
+;;            python-mode
+;;            js-mode
+;;            typescript-mode) . config/activate-lsp))
+;;   :commands (lsp lsp-deferred)
+;;   :init
+;;   (setq lsp-keymap-prefix "C-c l"
+;;         lsp-headerline-breadcrumb-enable t
+;;         lsp-log-io nil)
+;;   :config
+;;   (add-to-list 'exec-path "/home/hesham/.local/bin")
+;;   (setq-default lsp-odin-ols-binary-path "ols"
+;; 				lsp-odin-ols-server-dir "ols")
+;;   (setq lsp-headerline-breadcrumb-enable nil ; Disable breadcrumb by default
+;; 		lsp-log-io nil      ; Disable logging (set to t for debugging)
+;;         lsp-enable-snippet t
+;;         lsp-idle-delay 0.500            ; Update delay (seconds)
+;; 		lsp-copilot-enabled t
+;;         lsp-completion-provider :company
+;;         lsp-auto-guess-root t
+;;         lsp-keep-workspace-alive nil
+;;         lsp-enable-symbol-highlighting nil
+;;         lsp-enable-on-type-formatting nil
+;; 		lsp-format-buffer-on-save nil)
+
+;;   (setq lsp-clients-lua-language-server-bin "/usr/bin/lua-language-server"
+;;         lsp-clients-lua-language-server-main-location "/usr/lib/lua-language-server/main.lua")
+;;   (lsp-register-client
+;;    (make-lsp-client
+;; 	:new-connection (lsp-stdio-connection '("/home/hesham/jai/jails/bin/jails"))
+;; 	:activation-fn (lsp-activate-on "jai")
+;; 	:server-id 'jails))
+;;   (add-to-list 'lsp-language-id-configuration '(simpc-mode . "c"))
+
+;;   :general
+;;   (config/leader-def
+;;     "l a" '(lsp-execute-code-action :wk "Code Actions")
+;;     "l r" '(lsp-rename :wk "Rename")
+;;     "l R" '(lsp-restart-workspace :wk "Restart workspace")
+;;     "l f" '(lsp-format-buffer :wl "Format Buffer")))
+
+;; (use-package lsp-ui
+;;   :ensure t
+  
+;;   :after lsp-mode
+;;   :commands lsp-ui-mode
+;;   :hook (lsp-mode . lsp-ui-mode)
+;;   :config
+;;   ;; Disable auto popup
+;;   (setq lsp-ui-doc-enable t
+;;         lsp-ui-doc-show-with-cursor nil
+;;         lsp-ui-doc-show-with-mouse nil
+;;         lsp-ui-doc-position 'at-point)
+;;   :general
+;;   ;; Bind S-k to show hover
+;;   (:states '(normal)
+;;            :keymaps 'lsp-mode-map
+;;            "K" 'lsp-ui-doc-toggle))
 
 (use-package company-box
   :ensure t
@@ -191,7 +216,10 @@
                   (odin "https://github.com/ap29600/tree-sitter-odin")
                   (odin-mode "https://github.com/ap29600/tree-sitter-odin")
                   (c3 "https://github.com/c3lang/tree-sitter-c3")
-                  (c3-ts-mode "https://github.com/c3lang/tree-sitter-c3")))
+                  (c3-ts-mode "https://github.com/c3lang/tree-sitter-c3")
+				  (common-lisp "https://github.com/tree-sitter-grammars/tree-sitter-commonlisp")))
+;; Then run: M-x treesit-install-language-grammar RET common-lisp
+
   )
 
 (use-package tree-sitter-langs
@@ -370,12 +398,13 @@
 (use-package fennel-mode
   :ensure t)
 
-(use-package lsp-scheme
-  :ensure t
-  :after lsp-mode
-  :init
-  (setq lsp-scheme-implementation "chicken")
-  (add-hook 'scheme-mode-hook #'lsp-scheme))
+;; (use-package lsp-scheme
+;;   :ensure t
+;;   :after lsp-mode
+;;   :init
+;;   (setq lsp-scheme-implementation "chicken")
+;;   (add-hook 'scheme-mode-hook #'lsp-scheme)
+;;   )
 
 (use-package lsp-java
   :ensure t
@@ -393,3 +422,29 @@
 						  "-Xms100m"))
   )
 
+;; (use-package slime
+;;   :ensure t
+;;   :custom
+;;   (inferior-lisp-program "sbcl")
+;;   :config
+;;   (slime-setup '(slime-asdf
+;; 				 slime-fancy
+;; 				 slime-autodoc
+;; 				 slime-editing-commands
+;; 				 slime-fancy-inspector
+;; 				 slime-fontifying-fu
+;; 				 slime-fuzzy
+;; 				 slime-indentation
+;; 				 slime-mdot-fu
+;; 				 slime-package-fu
+;; 				 slime-references
+;; 				 slime-repl
+;; 				 slime-sbcl-exts
+;; 				 slime-scratch
+;; 				 slime-xref-browser)))
+(use-package sly
+  :ensure t
+  :init
+  (setq inferior-lisp-program "sbcl")
+  :config
+  (sly-setup '(sly-fancy)))

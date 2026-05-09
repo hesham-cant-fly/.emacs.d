@@ -5,21 +5,15 @@
   :ensure t
   )
 
-(use-package yascroll
-  :ensure t
-  
-  :config
-  (global-yascroll-bar-mode 1))
-
 (use-package spacious-padding
   :ensure t
-  
+
   :init ;; (spacious-padding-mode)
   )
 
 (use-package ligature
   :ensure t
-  
+
   :config
   (ligature-set-ligatures 'prog-mode '("--" "---" "==" "===" "!=" "!==" "=!="
                                        "=:=" "=/=" "<=" ">=" "&&" "&&&" "&=" "++" "+++" "***" ";;" "!!"
@@ -36,16 +30,8 @@
                                        "<:<" ";;;"))
   (global-ligature-mode t))
 
-(use-package keycast
-  :ensure t
-  
-  :config
-  ;;(keycast-mode-line-mode)
-  )
-
 (use-package writeroom-mode
   :ensure t
-  
   :general
   (config/leader-def
     "t z" '(writeroom-mode :wk "Local Zen Mode")
@@ -53,7 +39,6 @@
 
 (use-package solaire-mode
   :ensure t
-  
   :config
   (solaire-global-mode +1))
 
@@ -71,7 +56,6 @@
 ;;   :general
 ;;   (:states 'normal
 ;;            "C-w o" '(golden-ratio :wk "")))
-
 ;;   ;; Hook into Evil's state changes
 ;;   ;; (add-hook 'evil-normal-state-entry-hook #'config/golden-ratio-evil-integration)
 ;;   ;; (add-hook 'evil-insert-state-entry-hook #'config/golden-ratio-evil-integration)
@@ -79,45 +63,37 @@
 
 (use-package which-key
   :ensure t
-  
   :config
   (which-key-mode))
 
 (use-package elcord
   :ensure t
-  
   :config
   (elcord-mode))
 
 (use-package rainbow-delimiters
 	:ensure t
-  
 	:hook ((prog-mode) . rainbow-delimiters-mode))
 
 (use-package all-the-icons
   :ensure t
-  
+
   :if (display-graphic-p))
 
 (use-package rainbow-mode
-  :ensure t
-  )
-
+  :ensure t)
 
 (use-package hl-todo
-	:ensure t
-  
-	:config
-	(global-hl-todo-mode))
+  :ensure t
+  :config
+  (global-hl-todo-mode))
 
 (use-package highlight-numbers
   :ensure t
-  
   :hook (prog-mode . highlight-numbers-mode))
 
 (use-package highlight-defined
   :ensure t
-  
   :hook (emacs-lisp-mode . highlight-defined-mode))
 
 (use-package highlight-quoted
@@ -129,9 +105,9 @@
   ;; :hook (prog-mode . highlight-blocks-mode)
   )
 
-(use-package hl-line
-  :ensure t
-  :hook (prog-mode . hl-line-mode))
+;; (use-package hl-line
+;;   :ensure nil
+;;   :hook (prog-mode . hl-line-mode))
 
 (use-package beacon
   :ensure t
@@ -167,7 +143,7 @@
 
 (use-package doom-modeline
   :ensure t
-  ;; :init (doom-modeline-mode t)
+  :init (doom-modeline-mode t)
   :config
   (setq-default doom-modeline-height 50
         doom-modeline-bar-width 5
@@ -184,7 +160,7 @@
 
 (use-package screenshot
   :ensure '(:host github :repo "tecosaur/screenshot")
-  
+
   :after transient)
 
 (use-package zenburn-theme
@@ -193,17 +169,17 @@
 
 (use-package gruber-darker-theme
   :ensure t
-  
+
   :config)
 
 (use-package gruvbox-theme
   :ensure t
-  
+
   :config)
 
 (use-package wildcharm-theme
   :ensure t
-  
+
   :custom-face (font-lock-comment-face ((t (:slant italic)))))
 
 (use-package jetbrains-darcula-theme
@@ -218,3 +194,29 @@
   :config
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
+
+(use-package atom-one-dark-theme
+  :ensure t)
+
+;; (use-package whitespace
+;;   :diminish
+;;   ;; :hook (prog-mode . whitespace-mode)
+;;   :config
+;;   (setq whitespace-line-column 80
+;;         whitespace-style '(face tabs tab-mark spaces space-mark trailing lines-tail newline newline-mark)
+;;         whitespace-display-mappings
+;;         '(
+;;           (space-mark   ?\    [?\u00B7] [?.]) ; regular space -> ·
+;;           (space-mark   ?\xA0 [?\u00A4] [?_]) ; hard space -> ¤
+;;           (tab-mark     ?\t   [?\u00BB ?\t] [?\\ ?\t]) ; tab -> »
+;;           (newline-mark ?\n   [?\u00AC ?\n] [?$ ?\n])  ; newline -> ¬
+;;           ))
+;;   (set-face-attribute 'whitespace-tab nil :background nil)
+;;   (set-face-attribute 'whitespace-space nil :background nil)
+;;   ;; Disable in specific modes when using global-whitespace-mode
+;;   (setq whitespace-global-modes '(not magit-mode dired-mode shell-mode term-mode)))
+
+(use-package highlight-doxygen
+  :ensure t
+  :hook (simpc-mode . highlight-doxygen-mode)
+  :config)

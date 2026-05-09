@@ -15,7 +15,9 @@
 
 (defun config/activate-lsp ()
   (interactive)
-  (lsp))
+  ;; (lsp)
+  (eglot-ensure)
+  )
 
 (defun config/read-entire-file (FILE)
   "Reads `FILE' and returns its content as a string"
@@ -42,9 +44,12 @@
  "org-mode-config.el"
  "git-integration.el"
  "vibe.el"
- "mode-line.el")
+ "mode-line.el"
+ "app-launcher.el")
 
-(load-theme 'kaolin-dark t)
+;; (load-theme 'kaolin-dark t)
+;; (load-theme 'atom-one-dark t)
+(load-theme 'wombat t)
 
 (defun lsp-booster--advice-json-parse (old-fn &rest args)
   "Try to parse bytecode instead of json."
@@ -54,6 +59,7 @@
        (when (byte-code-function-p bytecode)
          (funcall bytecode))))
    (apply old-fn args)))
+
 (advice-add (if (progn (require 'json)
                        (fboundp 'json-parse-buffer))
                 'json-parse-buffer
@@ -114,6 +120,7 @@
  "simpc-mode.el"
  "hare-mode.el"
  "c-call-hl-mode.el"
+ "better-lisp-hl-mode.el"
  "my-shit-keyboard-fix-mode.el")
 
 (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
@@ -127,6 +134,10 @@
   ""
   (dolist (hook mode-hooks)
 	(add-hook hook #'my-shit-keyboard-fix-mode)))
+
+(add-hook 'lisp-mode-hook #'better-lisp-hl-mode)
+(add-hook 'clojure-mode-hook #'better-lisp-hl-mode)
+(add-hook 'clojurescript-mode-hook #'better-lisp-hl-mode)
 
 (config/hook-c-highlight
  'simpc-mode-hook

@@ -23,7 +23,7 @@
   (config/leader-def
 	"s" '(:ignore t :wk "Search"))
 
-  (config/leader-def
+  (config/leader-def ;; SPC
 	"w" (general-simulate-key "C-w")
 	"x" (general-simulate-key "M-x"))
 
@@ -46,8 +46,8 @@
   (config/leader-def
 	:states 'normal
 	"d"   '(:ignore t             :wk "Dired")
-	"d D" '(dired-jump            :wk "Open Dired")
-    "d P" '((lambda ()
+	"d d" '(dired-jump            :wk "Open Dired")
+    "d p" '((lambda ()
               (interactive)
               (find-file (expand-file-name "~/Documents/Projects/")))
             :wk "Open Project Directory"))

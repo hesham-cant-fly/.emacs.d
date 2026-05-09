@@ -1,5 +1,7 @@
 ;; (indent-tabs-mode)
 (setq-default
+ tags-revert-without-query 1
+
  ;; Editor Tweaks
  gc-cons-threshold 50000000
  x-stretch-cursor t
@@ -32,7 +34,7 @@
 (setq-default line-spacing 0)
 
 ;; Setting up emacs fonts
-(let ((font-size 160)
+(let ((font-size 180)
       (font-family "0xProto Nerd Font Mono"))
   (set-face-attribute 'fixed-pitch nil
                       :font font-family

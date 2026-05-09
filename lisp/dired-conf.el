@@ -5,12 +5,13 @@
   (:states 'normal :keymaps 'dired-mode-map
 		   "h" '(dired-up-directory :wk "Up Directory")
 		   "l" '(dired-find-file :wk "Open File"))
-  (config/leader-def
-	:states 'normal
-	"d d" '(dired-posframe :wk "Open Dired on a posframe")
-	"d p" '((lambda ()
-			  (dired-posframe (expand-file-name "~/Documents/Projects/")))
-			:wk "Open Project Directory on a posframe")))
+  ;; (config/leader-def
+  ;; 	:states 'normal
+  ;; 	"d d" '(dired-posframe :wk "Open Dired on a posframe")
+  ;; 	"d p" '((lambda ()
+  ;; 			  (dired-posframe (expand-file-name "~/Documents/Projects/")))
+  ;; 			:wk "Open Project Directory on a posframe"))
+  )
 
 (use-package all-the-icons-dired
   :ensure t

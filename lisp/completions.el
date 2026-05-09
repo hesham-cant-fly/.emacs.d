@@ -1,6 +1,6 @@
-(use-package vertico-flat
-  :ensure t
-  :after vertico)
+;; (use-package vertico-flat
+;;  :ensure t
+;;  :after vertico)
 
 (use-package vertico
   :ensure t
