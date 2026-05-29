@@ -49,22 +49,19 @@
 	:states 'normal
 	"t g" '(glasses-mode :wk "Toggles glasses-mode.")))
 
-(use-package consult-lsp
-  :ensure t
-  
-  :general
-  (config/leader-def
-	:states 'normal
-	"l s" '(consult-lsp-file-symbols     :wk "Search File Symbols")
-	"l S" '(consult-lsp-symbols          :wk "Search Project Symbols")
-	"l d" '(consult-lsp-file-diagnostics :wk "Search File Diagnostics")
-	"l D" '(consult-lsp-diagnostics      :wk "Search File Diagnostics")))
 
 (use-package eglot
   :ensure nil
   :hook ((simpc-mode
+		  c-mode
 		  clojure-mode
-		  clojurescript-mode) . config/activate-lsp)
+		  clojurescript-mode
+		  python-mode
+		  java-mode
+		  haskell-mode
+		  lua-mode
+		  odin-mode
+		  zig-mode) . config/activate-lsp)
   :custom
   (eglot-autoshutdown t)
   (eglot-events-buffer-size 2000000)
@@ -74,88 +71,24 @@
   (config/leader-def
     "l a" '(eglot-code-actions :wk "Code Actions")
     "l r" '(eglot-rename :wk "Rename")
-    "l R" '(eglot-reconnect :wk "Restart workspace")))
+    "l R" '(eglot-reconnect :wk "Restart workspace")
+    "l s" '(xref-find-definitions           :wk "Find Definitions")
+    "l S" '(xref-find-references            :wk "Find References")
+    "l d" '(flymake-show-buffer-diagnostics :wk "Buffer Diagnostics")
+    "l D" '(flymake-show-project-diagnostics :wk "Project Diagnostics")))
 
-;; (use-package lsp-mode
-;;   :ensure t
-  
-;;   :hook (((haskell-mode
-;;            web-mode
-;; 		   zig-mode
-;;            c++-mode
-;;            ;; svelte-mode
-;;            web-mode
-;;            c-mode
-;; 		   simpc-mode
-;;            rust-mode
-;;            go-mode
-;;            python-mode
-;;            js-mode
-;;            typescript-mode) . config/activate-lsp))
-;;   :commands (lsp lsp-deferred)
-;;   :init
-;;   (setq lsp-keymap-prefix "C-c l"
-;;         lsp-headerline-breadcrumb-enable t
-;;         lsp-log-io nil)
-;;   :config
-;;   (add-to-list 'exec-path "/home/hesham/.local/bin")
-;;   (setq-default lsp-odin-ols-binary-path "ols"
-;; 				lsp-odin-ols-server-dir "ols")
-;;   (setq lsp-headerline-breadcrumb-enable nil ; Disable breadcrumb by default
-;; 		lsp-log-io nil      ; Disable logging (set to t for debugging)
-;;         lsp-enable-snippet t
-;;         lsp-idle-delay 0.500            ; Update delay (seconds)
-;; 		lsp-copilot-enabled t
-;;         lsp-completion-provider :company
-;;         lsp-auto-guess-root t
-;;         lsp-keep-workspace-alive nil
-;;         lsp-enable-symbol-highlighting nil
-;;         lsp-enable-on-type-formatting nil
-;; 		lsp-format-buffer-on-save nil)
-
-;;   (setq lsp-clients-lua-language-server-bin "/usr/bin/lua-language-server"
-;;         lsp-clients-lua-language-server-main-location "/usr/lib/lua-language-server/main.lua")
-;;   (lsp-register-client
-;;    (make-lsp-client
-;; 	:new-connection (lsp-stdio-connection '("/home/hesham/jai/jails/bin/jails"))
-;; 	:activation-fn (lsp-activate-on "jai")
-;; 	:server-id 'jails))
-;;   (add-to-list 'lsp-language-id-configuration '(simpc-mode . "c"))
-
-;;   :general
-;;   (config/leader-def
-;;     "l a" '(lsp-execute-code-action :wk "Code Actions")
-;;     "l r" '(lsp-rename :wk "Rename")
-;;     "l R" '(lsp-restart-workspace :wk "Restart workspace")
-;;     "l f" '(lsp-format-buffer :wl "Format Buffer")))
-
-;; (use-package lsp-ui
-;;   :ensure t
-  
-;;   :after lsp-mode
-;;   :commands lsp-ui-mode
-;;   :hook (lsp-mode . lsp-ui-mode)
-;;   :config
-;;   ;; Disable auto popup
-;;   (setq lsp-ui-doc-enable t
-;;         lsp-ui-doc-show-with-cursor nil
-;;         lsp-ui-doc-show-with-mouse nil
-;;         lsp-ui-doc-position 'at-point)
-;;   :general
-;;   ;; Bind S-k to show hover
-;;   (:states '(normal)
-;;            :keymaps 'lsp-mode-map
-;;            "K" 'lsp-ui-doc-toggle))
+(use-package breadcrumb
+  :ensure t
+  ;; :hook (prog-mode . breadcrumb-local-mode)
+  )
 
 (use-package company-box
   :ensure t
-  
   :config
   :hook (company-mode . company-box-mode))
 
 (use-package company
   :ensure t
-  
   :hook (prog-mode . company-mode)
   :config
   (setq company-idle-delay 0.1
@@ -163,19 +96,8 @@
 
 (use-package flycheck
   :ensure t
-  
-  :hook (lsp-mode . flycheck-mode))
+  :hook (prog-mode . flycheck-mode))
 
-(use-package dap-mode
-  :ensure t
-  
-  :after lsp-mode
-  :config
-  (dap-auto-configure-mode)
-  (require 'dap-lldb)
-
-  (setq dap-lldb-debug-program "/usr/bin/lldb-dap")
-  )
 
 (use-package yasnippet
   :ensure t
@@ -299,8 +221,7 @@
 
 (use-package odin-mode
   :ensure '(:host github :repo "mattt-b/odin-mode")
-  
-  :hook (odin-mode . lsp))
+  )
 
 (use-package qbe-mode
   :ensure '(:host github :repo "mbknust/qbe-mode")
@@ -328,9 +249,6 @@
 (use-package haskell-mode
   :ensure t
   )
-(use-package lsp-haskell
-  :ensure t
-  )
 
 (use-package wren-mode
   :ensure t
@@ -338,8 +256,7 @@
 
 (use-package lua-mode
   :ensure t
-  
-  :hook (lua-mode . lsp))
+  )
 
 (use-package zig-mode
   :ensure t
@@ -384,13 +301,7 @@
   :ensure t
   )
 
-(use-package lsp-pyright
-  :ensure t
-  
-  :custom (lsp-pyright-langserver-command "pyright") ;; or basedpyright
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-pyright)
-                         (lsp))))
+
 
 (use-package clojure-mode
   :ensure t)
@@ -398,50 +309,6 @@
 (use-package fennel-mode
   :ensure t)
 
-;; (use-package lsp-scheme
-;;   :ensure t
-;;   :after lsp-mode
-;;   :init
-;;   (setq lsp-scheme-implementation "chicken")
-;;   (add-hook 'scheme-mode-hook #'lsp-scheme)
-;;   )
-
-(use-package lsp-java
-  :ensure t
-  :config
-  (add-hook 'java-mode-hook #'lsp)
-  (setq lsp-java-inlay-hints-parameter-names-enabled t)
-  (setq lsp-java-imports-gradle-wrapper-checksums
-		[ (:sha256 "b3a875ddc1f044746e1b1a55f645584505f4a10438c1afea9f15e92a7c42ec13" :allowed t)])
-  ;; (setq lsp-java-vmargs '("-Xmx4G" "-Xms1G" "-XX:+UseParallelGC"))
-  ;; (setq lsp-java-vmargs '("-XX:+UseParallelGC"))
-  (setq lsp-java-vmargs '("-XX:+UseParallelGC" "-XX:GCTimeRatio=4"
-						  "-XX:AdaptiveSizePolicyWeight=90"
-						  "-Dsun.zip.disableMemoryMapping=true"
-						  "-Xmx3G"
-						  "-Xms100m"))
-  )
-
-;; (use-package slime
-;;   :ensure t
-;;   :custom
-;;   (inferior-lisp-program "sbcl")
-;;   :config
-;;   (slime-setup '(slime-asdf
-;; 				 slime-fancy
-;; 				 slime-autodoc
-;; 				 slime-editing-commands
-;; 				 slime-fancy-inspector
-;; 				 slime-fontifying-fu
-;; 				 slime-fuzzy
-;; 				 slime-indentation
-;; 				 slime-mdot-fu
-;; 				 slime-package-fu
-;; 				 slime-references
-;; 				 slime-repl
-;; 				 slime-sbcl-exts
-;; 				 slime-scratch
-;; 				 slime-xref-browser)))
 (use-package sly
   :ensure t
   :init

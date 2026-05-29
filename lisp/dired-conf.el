@@ -2,7 +2,8 @@
   :custom
   (dired-listing-switches "-alh --group-directories-first")
   :general
-  (:states 'normal :keymaps 'dired-mode-map
+  (:states 'normal
+		   :keymaps 'dired-mode-map
 		   "h" '(dired-up-directory :wk "Up Directory")
 		   "l" '(dired-find-file :wk "Open File"))
   ;; (config/leader-def
@@ -28,7 +29,7 @@
     "f u" '(sudo-edit-find-file :wk "Sudo find file")
     "f U" '(sudo-edit           :wk "Sudo this file")))
 
-(defvar posframe-dired--buffer-name nil
+(defvar-local posframe-dired--buffer-name nil
   "The buffer itself")
 (defvar posframe-dired--frame nil
   "The current frame")

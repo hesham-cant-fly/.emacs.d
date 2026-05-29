@@ -1,6 +1,7 @@
 (use-package general
   :ensure t
   :config
+
   (general-create-definer config/leader-def
 	:keymaps 'override
 	:states '(normal visual emacs)
@@ -17,7 +18,13 @@
   (config/leader-def
     "o" '(:ignore t :wk "Open")
 	"o i" '(consult-imenu :wk "Open imenu")
-	"o I" '(consult-imenu-multi :wk "Open Global imenu"))
+	"o I" '(consult-imenu-multi :wk "Open Global imenu")
+	"o o" '(:ignore t :wk "Origami")
+	"o o r" '(origami-open-node-recursively :wk "Open Node recursively")
+	"o o t" '(origami-recursively-toggle-node :wk "toggle node")
+	"o o s" '(origami-show-only-node :wk "Close everything except the current node")
+	"o o c" '(origami-close-all-nodes :wk "Close all")
+	)
 
   ;; Search
   (config/leader-def

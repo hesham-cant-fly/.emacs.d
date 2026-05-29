@@ -1,5 +1,8 @@
 (defvar my-shit-keyboard-fix-font-lock-keywords
-  (let ((keywords '("get" "gt" "or" "and" "not")))
+  (let ((keywords '("get" "gt" "or" "and" "not"
+					"discard" "forange" "leach" "arreach" "iarreach" "then" "otherwise"
+					"run_at_percent"
+					)))
     `((,(regexp-opt keywords 'words)
        0 font-lock-keyword-face)))
   "Font-lock rules for my-shit-keyboard-fix-mode.")

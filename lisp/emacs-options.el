@@ -34,7 +34,7 @@
 (setq-default line-spacing 0)
 
 ;; Setting up emacs fonts
-(let ((font-size 180)
+(let ((font-size 160)
       (font-family "0xProto Nerd Font Mono"))
   (set-face-attribute 'fixed-pitch nil
                       :font font-family
@@ -98,7 +98,8 @@
               ada-when-indent tab-width
               ada-with-indent tab-width
               ada-label-indent (- tab-width)
-              hare-mode-indent-offset tab-width)
+              hare-mode-indent-offset tab-width
+			  lua-indent-level tab-width)
 (add-hook #'prog-mode-hook
           (lambda ()
             (interactive)

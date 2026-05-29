@@ -1,5 +1,3 @@
-(makunbound 'better-lisp-font-lock-keywords)
-
 (defun better-lisp-keywords ()
   '("until" "while" "or" "and"))
 

@@ -18,8 +18,12 @@
 				  (:eval (config/get-current-major-mode))
 				  "%I %c:%l"
 				  " "
-				  (:eval (nyan-create))
-				  )))
+				  (:eval (breadcrumb-project-crumbs))
+				  " : "
+				  (:eval (breadcrumb-imenu-crumbs))
+				  ;; (:eval (nyan-create))
+				  ))
+  )
 
 (defun config/deactivate-custom-mode-line ()
   (setq config/custom-mode-line nil)
@@ -77,7 +81,7 @@
   '((t ;; :foreground "white"
 	 :foreground "#ffff66"
 	 :weight bold))
-  "Face for `config/custom-mode-line' visual mode indicator"
+  "Face for `config/custom-mode-line' visual mode indicator."
   :group 'config/custom-mode-line)
 (face-spec-set
  'config/visual-mode-face
@@ -86,6 +90,7 @@
 	:weight bold)))
 
 (defun config/get-evil-mode-line-tag-color ()
+  "."
   (pcase evil-state
 	('normal 'config/normal-mode-face)
 	('insert 'config/insert-mode-face)
@@ -93,17 +98,18 @@
 	(else    'error)))
 
 (defun config/get-custom-evil-mode-line-tag-char ()
-  ""
+  "."
   (-> (symbol-name evil-state)
 	  (substring 0 1)
 	  (capitalize)))
 
 (defun config/string-prepend (STR STR2)
-  ""
+  "Concat `STR2' and `STR' ."
   (format "%s%s" STR2 STR))
 
 (defun config/wrap-in-space (STR)
-  ""
+  "Wrap `STR' in spaces."
   (format " %s " STR))
 
 (config/custom-mode-line)
+

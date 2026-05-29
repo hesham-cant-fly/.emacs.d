@@ -1,11 +1,13 @@
+(use-package htmlize
+  :ensure t)
 
 (use-package visual-fill-column
   :ensure t
-  
+
   :custom
-  (visual-fill-column-width 65)
+  (visual-fill-column-width 90)
   (visual-fill-column-center-text t)
-  (visual-fill-column-finges-outside-margins t))
+  (visual-fill-column-fringes-outside-margins t))
 
 (use-package type-break
   ;; :hook (after-init . type-break-mode)
@@ -21,11 +23,26 @@
 
 (use-package org-modern
   :ensure t
-  
-  :hook (org-mode . org-modern-mode))
+
+  :custom
+  (org-modern-keyword t)
+  (org-modern-todo t)
+  (org-modern-priority t)
+  ;; (org-modern-checkbox t)
+  (org-modern-hide-stars t)
+  (org-modern-star '("◉" "○" "✸" "✿" "◆" "▷"))
+  (org-modern-list '((?- . "•") (?+ . "‣") (?* . "◦")))
+  (org-modern-block-name t)
+  (org-modern-table t)
+  (org-modern-timestamp nil)
+  (org-modern-variable-pitch nil)
+
+  :hook
+  (org-mode . org-modern-mode)
+  (org-agenda-finalize . org-modern-agenda))
 
 (use-package org
-  
+
   :custom
   (org-directory (expand-file-name "~/Documents/org/"))
   (org-src-fontify-natively t)
@@ -37,45 +54,90 @@
   (org-src-preserve-indentation t)
   (org-edit-src-content-indentation 0)
   (org-startup-with-inline-images t)
-  (org-ellipsis "  [MORE]")
+  (org-ellipsis " ▾")
   (org-hide-emphasis-markers t)
   (org-link-descriptive t)
   (org-pretty-entities t)
   (org-hidden-keywords nil)
   (org-auto-align-tags nil)
-  (org-tags-column 0)
+  (org-tags-column -80)
   (org-catch-invisible-edits 'show-and-error)
   (org-special-ctrl-a/e t)
   (org-insert-heading-respect-content t)
-  (org-agenda-tags-column 0)
+  (org-agenda-tags-column -100)
   (org-startup-folded 'content)
+  (org-cycle-emulate-tab 'white)
+  (org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
   :hook
   (org-mode . visual-line-mode)
   (org-mode . visual-fill-column-mode)
+  (org-mode . org-indent-mode)
   (org-mode . (lambda ()
-				(setq display-line-numbers nil)))
+                (setq display-line-numbers nil)
+                (setq line-spacing 0.2)))
   :general
   (config/leader-def
-	:states 'normal
-	"n"   '(:ignore t :wk "Org")
-	"n t" '((lambda ()
-			  (interactive)
-			  (find-file (expand-file-name "~/Documents/org/refile.org")))
-			:wk "Open refile.org"))
+    :states 'normal
+    "n"   '(:ignore t :wk "Org")
+    "n t" '((lambda ()
+              (interactive)
+              (find-file (expand-file-name "~/Documents/org/refile.org")))
+            :wk "Open refile.org"))
   :config
   (custom-set-faces
-   ;; Title styling
-   '(org-document-title ((t (:height 2.1 :weight bold))))
+   '(org-document-title ((t (:height 2.0 :weight bold))))
+   '(org-document-info ((t (:height 1.1 :foreground "#908caa"))))
+   '(org-document-info-keyword ((t (:height 1.0 :foreground "#6e6a86"))))
 
-   ;; Example of org-levels if you want them uncommented and customized manually
-   ;; '(org-level-1 ((t (:foreground "#00b6ef" :height 1.5 :weight bold :slant normal))))
-   ;; '(org-level-2 ((t (:foreground "#26fb91" :height 1.3 :weight bold :slant normal))))
-   ;; '(org-level-3 ((t (:foreground "#fb8a26" :height 1.15 :weight bold :slant normal))))
+   '(org-level-1 ((t (:inherit bold :foreground "#f6c177" :height 1.55))))
+   '(org-level-2 ((t (:inherit bold :foreground "#ebbcba" :height 1.35))))
+   '(org-level-3 ((t (:inherit bold :foreground "#9ccfd8" :height 1.2))))
+   '(org-level-4 ((t (:inherit bold :foreground "#c4a7e7" :height 1.1))))
+   '(org-level-5 ((t (:inherit bold :foreground "#eb6f92" :height 1.1))))
+   '(org-level-6 ((t (:inherit bold :foreground "#31748f" :height 1.1))))
+   '(org-level-7 ((t (:inherit bold :foreground "#f6c177" :height 1.1))))
+   '(org-level-8 ((t (:inherit bold :foreground "#ebbcba" :height 1.1))))
 
-   ;; Code block and quote background
-   '(org-code ((t (:background "#2e2e2e")))) ;; Replace "#2e2e2e" with a darkened bg
-   '(org-quote ((t (:background "#2e2e2e")))) ;; Same here
-   )
+   '(org-code ((t (:inherit fixed-pitch :background "#26233a" :foreground "#9ccfd8"))))
+   '(org-verbatim ((t (:inherit fixed-pitch :background "#26233a" :foreground "#c4a7e7"))))
+   '(org-quote ((t (:inherit fixed-pitch :background "#1f1d2e" :foreground "#908caa" :slant italic))))
+   '(org-verse ((t (:background "#1f1d2e" :foreground "#908caa" :slant italic))))
+
+   '(org-block ((t (:inherit fixed-pitch :extend t))))
+   '(org-table ((t (:inherit fixed-pitch :foreground "#e0def4"))))
+   '(org-formula ((t (:inherit fixed-pitch))))
+   '(org-special-keyword ((t (:inherit fixed-pitch :foreground "#6e6a86"))))
+   '(org-property-value ((t (:inherit fixed-pitch))))
+   '(org-meta-line ((t (:inherit fixed-pitch :foreground "#6e6a86"))))
+   '(org-drawer ((t (:inherit fixed-pitch :foreground "#6e6a86"))))
+
+   '(org-checkbox ((t (:inherit fixed-pitch :weight bold))))
+   '(org-checkbox-statistics-todo ((t (:inherit fixed-pitch))))
+   '(org-checkbox-statistics-done ((t (:inherit fixed-pitch))))
+
+   '(org-tag ((t (:weight bold :foreground "#908caa"))))
+   '(org-list-dt ((t (:weight bold))))
+   '(org-footnote ((t (:foreground "#eb6f92"))))
+
+   '(org-date ((t (:foreground "#c4a7e7" :underline t))))
+   '(org-date-selected ((t (:inherit org-date :inverse-video t))))
+   '(org-time-grid ((t (:foreground "#6e6a86"))))
+   '(org-sexp-date ((t (:foreground "#c4a7e7"))))
+
+   '(org-todo ((t (:weight bold :foreground "#eb6f92"))))
+   '(org-done ((t (:weight bold :foreground "#9ccfd8"))))
+   '(org-priority ((t (:weight bold))))
+
+   '(org-agenda-date ((t (:foreground "#c4a7e7"))))
+   '(org-agenda-date-today ((t (:foreground "#f6c177" :weight bold))))
+   '(org-agenda-date-weekend ((t (:foreground "#eb6f92"))))
+   '(org-agenda-done ((t (:foreground "#9ccfd8"))))
+   '(org-scheduled ((t (:foreground "#e0def4"))))
+   '(org-scheduled-today ((t (:foreground "#f6c177"))))
+   '(org-scheduled-previously ((t (:foreground "#eb6f92"))))
+   '(org-upcoming-deadline ((t (:foreground "#ebbcba"))))
+   '(org-agenda-structure ((t (:foreground "#908caa" :weight bold))))
+   ))
   (defun my/org-follow-link-or-return ()
 	"Follow Org link in current window or execute default RET behavior."
 	(interactive)
@@ -94,7 +156,7 @@
   ;; Bind to Enter in Evil normal state for Org-mode
   (with-eval-after-load 'org
     (with-eval-after-load 'evil
-      (evil-define-key 'normal org-mode-map (kbd "RET") 'my/org-follow-link-or-return))))
+      (evil-define-key 'normal org-mode-map (kbd "RET") 'my/org-follow-link-or-return)))
 
 (use-package org-appear
   :ensure t
@@ -110,7 +172,13 @@
 
 (use-package org-superstar
   :ensure t
-  
+
+  :custom
+  (org-superstar-remove-leading-stars t)
+  (org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "◆" "▷"))
+  (org-superstar-item-bullet-alist '((?* . "•") (?+ . "‣") (?- . "◦")))
+  (org-superstar-special-todo-items t)
+
   :hook (org-mode . (lambda () (org-superstar-mode 1))))
 
 (use-package org-roam
@@ -125,7 +193,6 @@
 	"n r i" '(org-roam-node-insert   :wk "Insert a Node"))
   ;; custom-set-faces
   :custom
-  (org-roam-db-autosync-mode)
   (org-roam-directory (file-truename (expand-file-name org-directory "roam/")))
   (org-roam-capture-templates
    '(
@@ -158,7 +225,9 @@
 	 (file "~/Documents/org/roam/Templates/Default.org")
 	 :if-new
 	 (file+head "Index/${slug}.org" "#+title: ${title}\n")
-	 :unnarrowed t))))
+	 :unnarrowed t)))
+  :config
+  (org-roam-db-autosync-mode 1))
 
 (use-package org-roam-ui
   :ensure t

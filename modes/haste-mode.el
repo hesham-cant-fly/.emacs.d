@@ -10,7 +10,7 @@
 		   "var" "const" "func"
 		   "loop" "for" "while" "skip" "stop"
 		   "return" "defer" "errdefer" "okdefer"
-		   "if" "else" "do" "then"
+		   "if" "else" "do" "then" "end"
 		   "match" "case"
 		   "orelse"
 		   "in" "is" "or" "and" "not"
@@ -20,11 +20,13 @@
 		   "context" "undefined" "null" "true" "false"
 		   "dynamic" "auto"
 		   "static"
+		   "with"
+		   "pure"
 		   )
 		 )
 		(types
 		 '("it"
-		   "any" "typeid" "void"
+		   "any" "type" "void"
 		   "char" "str" "string"
 		   "bool"
 		   "uint" "uint8" "uint16" "uint32" "uint64" "int" "int8" "int16" "int32" "int64" "usize" "isize"
@@ -33,11 +35,12 @@
 		   "self"
 		   )))
 	;;(rx-to-string `(: (or ,@keywords)))
-	`(((,(regexp-opt keywords 'words) 0 font-lock-keyword-face)
-	   ("#\\([[:word:]]+\\)" 0 font-lock-keyword-face)
+	`((("#\\([[:word:]]+\\)" 0 font-lock-preprocessor-face)
+	   (,(regexp-opt keywords 'words) 0 font-lock-keyword-face)
 	   ("\\([[:word:]]+\\)\s*\\(<.*>\\)?\s*(" 1 font-lock-function-name-face)
+	   ("'\\([[:word:]]+\\)" 0 font-lock-type-face)
 	   ("@\\([[:word:]]+\\)" 0 font-lock-function-name-face)
-	   ("#" 0 font-lock-keyword-face)
+	   ("#" 0 font-lock-preprocessor-face)
 	   ("!" 0 font-lock-keyword-face)
 	   ("class\s+\\([[:word:]]+\\)" 1 font-lock-type-face)
 	   ("enum\s+\\([[:word:]]+\\)" 1 font-lock-type-face)
@@ -57,7 +60,7 @@
 
 	;; both single and double quotes makes strings
 	(modify-syntax-entry ?\" "\"" st)
-	(modify-syntax-entry ?' "\"" st)
+	;; (modify-syntax-entry ?' "\"" st)
 
     ;; '==' as punctuation
     (modify-syntax-entry ?= "." st)
@@ -72,7 +75,8 @@
 
 (defun haste-indent-line ()
   "Indent current line."
-  (js-indent-line)
+  ;; (js-indent-line)
+  (lua-indent-line)
   ;; (let (indent
   ;; 		boi-p                           ;begin of indent
   ;; 		move-eol-p

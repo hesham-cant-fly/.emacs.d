@@ -143,20 +143,21 @@
 
 (use-package doom-modeline
   :ensure t
-  :init (doom-modeline-mode t)
+  ;; :init (doom-modeline-mode t)
   :config
-  (setq-default doom-modeline-height 50
-        doom-modeline-bar-width 5
-        doom-modeline-persp-name t
-        doom-modeline-persp-icon t
-        doom-modeline-total-line-number t))
+  (setq-default doom-modeline-height 60
+				doom-modeline-bar-width 5
+				doom-modeline-persp-name t
+				doom-modeline-persp-icon t
+				doom-modeline-total-line-number t))
 
 (use-package nyan-mode
   :ensure t
-  :hook ((prog-mode text-mode) . nyan-mode)
+  ;; :hook ((prog-mode text-mode) . nyan-mode)
   :config
   (setq-default nyan-animate-nyancat t)
-  (nyan-start-animation))
+  ;; (nyan-start-animation)
+  )
 
 (use-package screenshot
   :ensure '(:host github :repo "tecosaur/screenshot")
@@ -220,3 +221,16 @@
   :ensure t
   :hook (simpc-mode . highlight-doxygen-mode)
   :config)
+
+(use-package auto-highlight-symbol
+  :ensure t
+  :config
+  ;; (global-auto-composition-mode)
+  (global-auto-highlight-symbol-mode)
+  )
+
+;; gregsexton/origami.el
+(use-package origami
+  :ensure t
+  :config
+  (global-origami-mode))
