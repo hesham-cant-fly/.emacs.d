@@ -29,13 +29,14 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (add-to-list 'default-frame-alist
-			 '(alpha-background . 100))
+             '(alpha-background . 100))
 
 (setq-default line-spacing 0)
 
 ;; Setting up emacs fonts
-(let ((font-size 160)
-      (font-family "0xProto Nerd Font Mono"))
+(let ((font-size 150)
+      (font-family "0xProto Nerd Font Mono")
+      )
   (set-face-attribute 'fixed-pitch nil
                       :font font-family
                       :height font-size)
@@ -60,23 +61,23 @@
   "Set the font size."
   (interactive
    (list
-	(read-number (format "Font Size (currently %d): " (config/get-font-size)))))
+    (read-number (format "Font Size (currently %d): " (config/get-font-size)))))
   (let ((font-family "0xProto Nerd Font Mono"))
-	(set-face-attribute 'fixed-pitch nil
-						:font font-family
-						:height font-size)
-	(set-face-attribute 'default nil
-						:font font-family
-						:height font-size)
-	(set-face-attribute 'variable-pitch nil
-						:font font-family
-						:height font-size)
-	(set-face-attribute 'font-lock-comment-face nil
-						:slant 'italic)
-	(set-face-attribute 'font-lock-keyword-face nil
-						:slant 'italic)
-	(set-fontset-font t 'arabic
-					  (font-spec :family "Amiri" :size 16))))
+    (set-face-attribute 'fixed-pitch nil
+                        :font font-family
+                        :height font-size)
+    (set-face-attribute 'default nil
+                        :font font-family
+                        :height font-size)
+    (set-face-attribute 'variable-pitch nil
+                        :font font-family
+                        :height font-size)
+    (set-face-attribute 'font-lock-comment-face nil
+                        :slant 'italic)
+    (set-face-attribute 'font-lock-keyword-face nil
+                        :slant 'italic)
+    (set-fontset-font t 'arabic
+                      (font-spec :family "Amiri" :size 16))))
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
@@ -99,7 +100,8 @@
               ada-with-indent tab-width
               ada-label-indent (- tab-width)
               hare-mode-indent-offset tab-width
-			  lua-indent-level tab-width)
+              lua-indent-level tab-width)
+
 (add-hook #'prog-mode-hook
           (lambda ()
             (interactive)
@@ -107,3 +109,10 @@
 
 (defalias (intern "toggle-read-only")
   `(lambda () (interactive) (read-only-mode)))
+
+(defun my-strict-lisp-indentation-hook ()
+  "Enforce strict space-only indentation across all Lisp family languages."
+  (setq-local indent-tabs-mode nil)
+  (setq-local tab-width 2))
+
+(add-hook 'lisp-data-mode-hook #'my-strict-lisp-indentation-hook)

@@ -46,28 +46,30 @@
   (glasses-uncapitalize-p nil)
   :general
   (config/leader-def
-	:states 'normal
-	"t g" '(glasses-mode :wk "Toggles glasses-mode.")))
+    :states 'normal
+    "t g" '(glasses-mode :wk "Toggles glasses-mode.")))
 
 
 (use-package eglot
   :ensure nil
   :hook ((simpc-mode
-		  c-mode
-		  clojure-mode
-		  clojurescript-mode
-		  python-mode
-		  java-mode
-		  haskell-mode
-		  lua-mode
-		  odin-mode
-		  zig-mode) . config/activate-lsp)
+          c-mode
+          c++-mode
+          clojure-mode
+          clojurescript-mode
+          python-mode
+          java-mode
+          haskell-mode
+          lua-mode
+          odin-mode
+          zig-mode) . config/activate-lsp)
   :custom
   (eglot-autoshutdown t)
   (eglot-events-buffer-size 2000000)
+  (eglot-ignored-server-capabilities '(:inlayHintProvider))
   :config
   (add-to-list 'eglot-server-programs
-			   '((simpc-mode) . ("clangd" "--header-insertion=never")))
+               '((simpc-mode c-mode c++-mode) . ("clangd" "--header-insertion=never")))
   (config/leader-def
     "l a" '(eglot-code-actions :wk "Code Actions")
     "l r" '(eglot-rename :wk "Rename")
@@ -98,10 +100,8 @@
   :ensure t
   :hook (prog-mode . flycheck-mode))
 
-
 (use-package yasnippet
   :ensure t
-  
   :config
   (yas-global-mode 1))
 
@@ -112,11 +112,12 @@
 
 (use-package tree-sitter
   :ensure t
-  
-  ;; :hook (((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode js-mode typescript-mode c-mode) . tree-sitter-mode)
-  ;;        ((emacs-lisp-mode rust-mode scheme-mode haskell-mode lua-mode d-mode js-mode typescript-mode c-mode) . tree-sitter-hl-mode)
-  ;;        ((emacs-lisp-mode) . (lambda () (config/treesit-parser-for-lang-mode 'elisp))))
+  :hook (((c++-mode
+           c-mode
+           ;; simpc-mode
+           lisp-mode) . tree-sitter-hl-mode))
   :config
+  (puthash #'simpc-mode 'cpp tree-sitter-major-mode-language-table)
   (setq-default treesit-language-source-alist
                 '((bash "https://github.com/tree-sitter/tree-sitter-bash")
                   (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "tsx/src"))
@@ -137,12 +138,11 @@
                   (clojure "https://github.com/sogaiu/tree-sitter-clojure")
                   (odin "https://github.com/ap29600/tree-sitter-odin")
                   (odin-mode "https://github.com/ap29600/tree-sitter-odin")
-                  (c3 "https://github.com/c3lang/tree-sitter-c3")
-                  (c3-ts-mode "https://github.com/c3lang/tree-sitter-c3")
-				  (common-lisp "https://github.com/tree-sitter-grammars/tree-sitter-commonlisp")))
-;; Then run: M-x treesit-install-language-grammar RET common-lisp
-
-  )
+                  (c "https://github.com/tree-sitter/tree-sitter-c")
+                  (cpp "https://github.com/tree-sitter/tree-sitter-cpp")
+                  (commonlisp "https://github.com/tree-sitter-grammars/tree-sitter-commonlisp")
+                  ;; (commonlisp "https://github.com/theHamsta/tree-sitter-commonlisp" "master" "src")
+                  )))
 
 (use-package tree-sitter-langs
   :ensure t
@@ -178,9 +178,9 @@
   :config
   (require 'ansi-color)
   (defun colorize-compilation-buffer ()
-	"Make the compilation buffer looks as intended."
-	(with-read-only
-	 (ansi-color-apply-on-region compilation-filter-start (point))))
+    "Make the compilation buffer looks as intended."
+    (with-read-only
+     (ansi-color-apply-on-region compilation-filter-start (point))))
   (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 
   (add-to-list 'display-buffer-alist
@@ -209,11 +209,11 @@
   :ensure t
   :config
   (config/leader-def
-	"o p" '(poporg-dwim :wk "Poporg DWIM"))
+    "o p" '(poporg-dwim :wk "Poporg DWIM"))
   (config/local-leader-def
-	:keymaps 'poporg-mode-map
-	"s" '(poporg-update :wk "Update The Original Buffer")
-	"q" '(poporg-edit-exit :wk "Save & Quit Poporg")))
+    :keymaps 'poporg-mode-map
+    "s" '(poporg-update :wk "Update The Original Buffer")
+    "q" '(poporg-edit-exit :wk "Save & Quit Poporg")))
 
 (use-package v-mode
   :ensure t
@@ -229,17 +229,13 @@
 
 (use-package ada-mode
   :ensure '(:host github
-				  :repo "tkurtbond/old-ada-mode"
-				  :source "Github"
-				  :branch "main")
+                  :repo "tkurtbond/old-ada-mode"
+                  :source "Github"
+                  :branch "main")
   )
-
-(use-package c3-ts-mode
-  :ensure '(:host github :repo "c3lang/c3-ts-mode"))
 
 (use-package nix-mode
   :ensure t
-  
   :mode "\\.nix\\'")
 
 (use-package elixir-mode

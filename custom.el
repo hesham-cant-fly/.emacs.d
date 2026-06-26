@@ -5,16 +5,17 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("9b21c848d09ba7df8af217438797336ac99cbbbc87a08dc879e9291673a6a631"
-	 "fc1275617f9c8d1c8351df9667d750a8e3da2658077cfdda2ca281a2ebc914e0"
-	 "45631691477ddee3df12013e718689dafa607771e7fd37ebc6c6eb9529a8ede5"
-	 default))
+   '("5beb9cc517b24959e2ee7be47584270bbe11a7b210807fa419d41ede12174a26"
+     "9b21c848d09ba7df8af217438797336ac99cbbbc87a08dc879e9291673a6a631"
+     "fc1275617f9c8d1c8351df9667d750a8e3da2658077cfdda2ca281a2ebc914e0"
+     "45631691477ddee3df12013e718689dafa607771e7fd37ebc6c6eb9529a8ede5"
+     default))
  '(org-fold-catch-invisible-edits 'show-and-error nil nil "Customized with use-package org")
  '(package-selected-packages
    '(breadcrumb clojure-mode clojure-ts-mode dart-mode dockerfile-mode
-				ef-themes scala-mode smalltalk-mode spacemacs-theme
-				spacious-padding subatomic-theme toc-org tuareg
-				yaml-mode zig-mode)))
+                ef-themes scala-mode smalltalk-mode spacemacs-theme
+                spacious-padding subatomic-theme toc-org tuareg
+                yaml-mode zig-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -72,4 +73,9 @@
  '(org-todo ((t (:weight bold :foreground "#eb6f92"))))
  '(org-upcoming-deadline ((t (:foreground "#ebbcba"))))
  '(org-verbatim ((t (:inherit fixed-pitch :background "#26233a" :foreground "#c4a7e7"))))
- '(org-verse ((t (:background "#1f1d2e" :foreground "#908caa" :slant italic)))))
+ '(org-verse ((t (:background "#1f1d2e" :foreground "#908caa" :slant italic))))
+ '(whitespace-lines-tail ((t (:background unspecified :foreground "#555555"))))
+ '(whitespace-newline ((t (:background unspecified :foreground "#555555"))))
+ '(whitespace-space ((t (:background unspecified :foreground "#555555"))))
+ '(whitespace-tab ((t (:background unspecified :foreground "#555555"))))
+ '(whitespace-trailing ((t (:background unspecified :foreground "#555555")))))

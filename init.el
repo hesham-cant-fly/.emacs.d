@@ -1,15 +1,15 @@
 (defun config/load-all (root &rest names)
   (unless (stringp root)
-	(error "Root is exepected to be a string"))
+    (error "Root is exepected to be a string"))
   (let ((root-path (expand-file-name root user-emacs-directory)))
     (dolist (name names)
       (unless (stringp name)
         (error (format "`%s` isn't a string. got `%s`"
                        name (type-of name))))
-      (load-file (expand-file-name name root-path))))
-  (elpaca-wait))
+      (load-file (expand-file-name name root-path)))))
 
-(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+(add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes/" ))
+(load-theme 'bloodvoid t)
 
 (defun config/activate-lsp ()
   (interactive)
@@ -18,65 +18,10 @@
 (defun config/read-entire-file (FILE)
   "Reads `FILE' and returns its content as a string"
   (with-temp-buffer
-	(-> FILE
-		(expand-file-name user-emacs-directory)
-		(insert-file-contents))
-	(buffer-string)))
-
-(config/load-all
- "lisp"
- "emacs-options.el"
- "functions.el"
- "bootstrap.el"
- "keybindings.el"
- "completions.el"
- "modals.el"
- "movement.el"
- "dashboard.el"
- "templates.el"
- "workspace.el"
- "dired-conf.el"
- "visuals.el"
- "ide.el"
- "org-mode-config.el"
- "git-integration.el"
- "vibe.el"
- "mode-line.el"
- "app-launcher.el")
-
-;; (load-theme 'kaolin-dark t)
-;; (load-theme 'atom-one-dark t)
-(load-theme 'doom-solarized-dark t)
-
-(setq-default c-style-alist '(("gnu" (c-basic-offset . 2) (c-comment-only-line-offset 0 . 0)
-							   (c-hanging-braces-alist (substatement-open before after)
-													   (arglist-cont-nonempty))
-							   (c-offsets-alist (statement-block-intro . +) (knr-argdecl-intro . 5)
-												(substatement-open . +) (substatement-label . 0)
-												(label . 0) (statement-case-open . +)
-												(statement-cont . +)
-												(arglist-intro . c-lineup-arglist-intro-after-paren)
-												(arglist-close . c-lineup-arglist)
-												(inline-open . 0) (brace-list-open . +)
-												(brace-list-intro first
-																  c-lineup-2nd-brace-entry-in-arglist
-																  c-lineup-class-decl-init-+ +)
-												(topmost-intro-cont first
-																	c-lineup-topmost-intro-cont
-																	c-lineup-gnu-DEFUN-intro-cont))
-							   (c-special-indent-hook . c-gnu-impose-minimum)
-							   (c-block-comment-prefix . #1=""))
-							  ("bsd" (c-basic-offset . tab-width) (c-comment-only-line-offset . 0)
-							   (c-offsets-alist (statement-block-intro . +) (knr-argdecl-intro . +)
-												(substatement-open . 0) (substatement-label . 0)
-												(label . 0) (statement-cont . +) (inline-open . 0)
-												(brace-list-intro first
-																  c-lineup-2nd-brace-entry-in-arglist
-																  c-lineup-class-decl-init-+ +)
-												(inexpr-class . 0)))))
-
-(add-to-list 'c-default-style
-			 (cons #'c-mode "bsd"))
+    (-> FILE
+        (expand-file-name user-emacs-directory)
+        (insert-file-contents))
+    (buffer-string)))
 
 (config/load-all
  "modes"
@@ -88,17 +33,73 @@
  "better-lisp-hl-mode.el"
  "my-shit-keyboard-fix-mode.el")
 
-;; (add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
+;; (load-file (expand-file-name  (expand-file-name "lisp" user-emacs-directory)))
+
+(config/load-all
+ "lisp"
+ "emacs-options.el"
+ "bootstrap.el"
+ "functions.el"
+ "keybindings.el"
+ "completions.el"
+ "modals.el"
+ "movement.el"
+ "dashboard.el"
+ "templates.el"
+ "workspace.el"
+ "dired-conf.el"
+ "themes.el"
+ "visuals.el"
+ "ide.el"
+ "org-mode-config.el"
+ "git-integration.el"
+ "vibe.el"
+ "mode-line.el"
+ "app-launcher.el"
+ "ui.el")
+(elpaca-wait)
+
+(setq-default c-style-alist '(("gnu" (c-basic-offset . 2) (c-comment-only-line-offset 0 . 0)
+                               (c-hanging-braces-alist (substatement-open before after)
+                                                       (arglist-cont-nonempty))
+                               (c-offsets-alist (statement-block-intro . +) (knr-argdecl-intro . 5)
+                                                (substatement-open . +) (substatement-label . 0)
+                                                (label . 0) (statement-case-open . +)
+                                                (statement-cont . +)
+                                                (arglist-intro . c-lineup-arglist-intro-after-paren)
+                                                (arglist-close . c-lineup-arglist)
+                                                (inline-open . 0) (brace-list-open . +)
+                                                (brace-list-intro first
+                                                                  c-lineup-2nd-brace-entry-in-arglist
+                                                                  c-lineup-class-decl-init-+ +)
+                                                (topmost-intro-cont first
+                                                                    c-lineup-topmost-intro-cont
+                                                                    c-lineup-gnu-DEFUN-intro-cont))
+                               (c-special-indent-hook . c-gnu-impose-minimum)
+                               (c-block-comment-prefix . #1=""))
+                              ("bsd" (c-basic-offset . tab-width) (c-comment-only-line-offset . 0)
+                               (c-offsets-alist (statement-block-intro . +) (knr-argdecl-intro . +)
+                                                (substatement-open . 0) (substatement-label . 0)
+                                                (label . 0) (statement-cont . +) (inline-open . 0)
+                                                (brace-list-intro first
+                                                                  c-lineup-2nd-brace-entry-in-arglist
+                                                                  c-lineup-class-decl-init-+ +)
+                                                (inexpr-class . 0)))))
+
+(add-to-list 'c-default-style
+             (cons #'c-mode "bsd"))
+
+(add-to-list 'auto-mode-alist '("\\.[hc]\\(pp\\)?\\'" . simpc-mode))
 
 (defun config/hook-c-highlight (&rest mode-hooks)
   ""
   (dolist (hook mode-hooks)
-	(add-hook hook #'c-call-hl-mode)))
+    (add-hook hook #'c-call-hl-mode)))
 
 (defun config/hook-shit (&rest mode-hooks)
   ""
   (dolist (hook mode-hooks)
-	(add-hook hook #'my-shit-keyboard-fix-mode)))
+    (add-hook hook #'my-shit-keyboard-fix-mode)))
 
 (add-hook 'lisp-mode-hook #'better-lisp-hl-mode)
 (add-hook 'clojure-mode-hook #'better-lisp-hl-mode)
@@ -115,7 +116,7 @@
  'zig-mode-hook)
 
 (config/hook-shit
- ;; 'simpc-mode-hook
+ 'simpc-mode-hook
  'c-mode-hook
  'c++-mode-hook)
 

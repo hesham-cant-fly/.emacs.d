@@ -50,6 +50,7 @@
 	;; custom keyword
 	"discard" "leach" "arreach" "iarreach" "then" "otherwise"
 	"run_at_percent"
+	"defer" "errdefer"
 	))
 
 (defun simpc-font-lock-keywords ()

@@ -25,3 +25,17 @@
 	"\n"
 	"\n"
 	"#endif /* !" (dih-name---) " */\n"))
+
+(define-auto-insert
+  '("\\.hpp\\'" . "C / C++ header")
+  '(nil
+	"/** Created in: " (format-time-string "%d/%M/%Y %H:%m") "\n"
+	"  *\n"
+	"  */\n"
+	"#ifndef " (dih-name---) "\n"
+	"#define " (dih-name---) "\n"
+	"\n"
+	"\n"
+	"\n"
+	"#endif /* !" (dih-name---) " */\n"))
+

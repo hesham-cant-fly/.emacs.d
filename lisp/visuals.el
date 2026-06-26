@@ -127,7 +127,7 @@
   (indent-bars-treesit-ignore-blank-lines-types '("module"))
   (indent-bars-treesit-wrap
    '((elisp quote special_form function_definition)
-	 (c argument_list parameter_list init_declarator parenthesized_expression)))
+     (c argument_list parameter_list init_declarator parenthesized_expression)))
   :config
   ;; Styles
   (setq-default
@@ -139,17 +139,18 @@
    indent-bars-color-by-depth '(:regexp "outline-\\([0-9]+\\)" :blend 1) ; blend=1: blend with BG only
    indent-bars-highlight-current-depth '(:blend 0.5) ; pump up the BG blend on current
    indent-bars-display-on-blank-lines t)
-  :hook ((prog-mode) . indent-bars-mode))
+  ;; :hook ((prog-mode) . indent-bars-mode)
+  )
 
 (use-package doom-modeline
   :ensure t
   ;; :init (doom-modeline-mode t)
   :config
   (setq-default doom-modeline-height 60
-				doom-modeline-bar-width 5
-				doom-modeline-persp-name t
-				doom-modeline-persp-icon t
-				doom-modeline-total-line-number t))
+                doom-modeline-bar-width 5
+                doom-modeline-persp-name t
+                doom-modeline-persp-icon t
+                doom-modeline-total-line-number t))
 
 (use-package nyan-mode
   :ensure t
@@ -161,61 +162,38 @@
 
 (use-package screenshot
   :ensure '(:host github :repo "tecosaur/screenshot")
-
   :after transient)
 
-(use-package zenburn-theme
-  :ensure t
-  )
-
-(use-package gruber-darker-theme
-  :ensure t
-
-  :config)
-
-(use-package gruvbox-theme
-  :ensure t
-
-  :config)
-
-(use-package wildcharm-theme
-  :ensure t
-
-  :custom-face (font-lock-comment-face ((t (:slant italic)))))
-
-(use-package jetbrains-darcula-theme
-  :ensure t
-  )
-
-(use-package kaolin-themes
-  :ensure t)
-
-(use-package doom-themes
-  :ensure t
+(use-package whitespace
+  :diminish whitespace-mode
+  :hook (prog-mode . whitespace-mode)
+  :init
+  (setq whitespace-line-column 80
+        whitespace-style '(face
+                           tabs
+                           spaces
+                           trailing
+                           newline
+                           space-mark
+                           tab-mark
+                           newline-mark)
+        whitespace-global-modes '(not magit-mode dired-mode shell-mode term-mode)
+        whitespace-display-mappings
+        '((space-mark   ?\s   [?·]     [?.])  ; Space -> Middle dot
+          (space-mark   ?\xA0 [?¤]     [?_])  ; Hard space
+          (tab-mark     ?\t   [?→ ?\t] [?\\ ?\t]) ; Tab -> Clean arrow
+          ;; (newline-mark ?\n   [?\u00AC ?\n] [?$ ?\n])  ; newline -> ¬
+          (newline-mark ?\n   [?-?\n] [?$ ?\n])  ; newline -> ¬
+          ))
   :config
-  (doom-themes-visual-bell-config)
-  (doom-themes-org-config))
-
-(use-package atom-one-dark-theme
-  :ensure t)
-
-;; (use-package whitespace
-;;   :diminish
-;;   ;; :hook (prog-mode . whitespace-mode)
-;;   :config
-;;   (setq whitespace-line-column 80
-;;         whitespace-style '(face tabs tab-mark spaces space-mark trailing lines-tail newline newline-mark)
-;;         whitespace-display-mappings
-;;         '(
-;;           (space-mark   ?\    [?\u00B7] [?.]) ; regular space -> ·
-;;           (space-mark   ?\xA0 [?\u00A4] [?_]) ; hard space -> ¤
-;;           (tab-mark     ?\t   [?\u00BB ?\t] [?\\ ?\t]) ; tab -> »
-;;           (newline-mark ?\n   [?\u00AC ?\n] [?$ ?\n])  ; newline -> ¬
-;;           ))
-;;   (set-face-attribute 'whitespace-tab nil :background nil)
-;;   (set-face-attribute 'whitespace-space nil :background nil)
-;;   ;; Disable in specific modes when using global-whitespace-mode
-;;   (setq whitespace-global-modes '(not magit-mode dired-mode shell-mode term-mode)))
+  (let ((color "#555555"))
+    (custom-set-faces
+     `(whitespace-tab ((t (:background unspecified :foreground ,color))))
+     `(whitespace-lines-tail ((t (:background unspecified :foreground ,color))))
+     `(whitespace-space ((t (:background unspecified :foreground ,color))))
+     `(whitespace-trailing ((t (:background unspecified :foreground ,color))))
+     `(whitespace-newline ((t (:background unspecified :foreground ,color))))))
+  )
 
 (use-package highlight-doxygen
   :ensure t
@@ -226,8 +204,7 @@
   :ensure t
   :config
   ;; (global-auto-composition-mode)
-  (global-auto-highlight-symbol-mode)
-  )
+  (global-auto-highlight-symbol-mode))
 
 ;; gregsexton/origami.el
 (use-package origami
