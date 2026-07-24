@@ -5,17 +5,20 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("5beb9cc517b24959e2ee7be47584270bbe11a7b210807fa419d41ede12174a26"
+   '("af077a05e630a9c4e92ada984cdd7eeaf4e8b12185e8f011821576b24014fa5a"
+     "5beb9cc517b24959e2ee7be47584270bbe11a7b210807fa419d41ede12174a26"
      "9b21c848d09ba7df8af217438797336ac99cbbbc87a08dc879e9291673a6a631"
      "fc1275617f9c8d1c8351df9667d750a8e3da2658077cfdda2ca281a2ebc914e0"
      "45631691477ddee3df12013e718689dafa607771e7fd37ebc6c6eb9529a8ede5"
      default))
+ '(evil-undo-system 'undo-redo)
  '(org-fold-catch-invisible-edits 'show-and-error nil nil "Customized with use-package org")
  '(package-selected-packages
-   '(breadcrumb clojure-mode clojure-ts-mode dart-mode dockerfile-mode
-                ef-themes scala-mode smalltalk-mode spacemacs-theme
-                spacious-padding subatomic-theme toc-org tuareg
-                yaml-mode zig-mode)))
+   '(alect-themes breadcrumb clojure-mode clojure-ts-mode dart-mode
+                  dockerfile-mode ef-themes gotham-theme markdown-mode
+                  scala-mode smalltalk-mode spacemacs-theme
+                  spacious-padding subatomic-theme toc-org tuareg
+                  yaml-mode zig-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

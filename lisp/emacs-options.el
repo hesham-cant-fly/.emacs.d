@@ -34,8 +34,8 @@
 (setq-default line-spacing 0)
 
 ;; Setting up emacs fonts
-(let ((font-size 150)
-      (font-family "0xProto Nerd Font Mono")
+(let ((font-size 160)
+      (font-family "Comic Mono")
       )
   (set-face-attribute 'fixed-pitch nil
                       :font font-family

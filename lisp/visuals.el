@@ -1,15 +1,11 @@
 (use-package pdf-tools
-  :ensure t
-  )
+  :ensure t)
+
 (use-package tldr
-  :ensure t
-  )
+  :ensure t)
 
 (use-package spacious-padding
-  :ensure t
-
-  :init ;; (spacious-padding-mode)
-  )
+  :ensure t)
 
 (use-package ligature
   :ensure t
@@ -77,7 +73,6 @@
 
 (use-package all-the-icons
   :ensure t
-
   :if (display-graphic-p))
 
 (use-package rainbow-mode
@@ -166,7 +161,7 @@
 
 (use-package whitespace
   :diminish whitespace-mode
-  :hook (prog-mode . whitespace-mode)
+  ;; :hook (prog-mode . whitespace-mode)
   :init
   (setq whitespace-line-column 80
         whitespace-style '(face

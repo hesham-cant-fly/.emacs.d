@@ -4,16 +4,27 @@
   `(let ((inhibit-read-only t))
 	,@body))
 
+(defmacro with-debug-on-error (&rest body)
+  "Execute BODY with `debug-on-error' temporarily enabled.
+Ensures the original value is restored even if an error occurs."
+  (let ((old-value (make-symbol "old-value")))
+	`(let ((,old-value debug-on-error))
+	   (unwind-protect
+		   (progn
+			 (setq debug-on-error nil)
+			 ,@body)
+		 (setq debug-on-error ,old-value)))))
+
 (defmacro with-notabs (&rest body)
   "Execute BODY with `indent-tabs-mode' temporarily disabled.
 Ensures the original value is restored even if an error occurs."
   (let ((old-value (make-symbol "old-value")))
-	`(let ((,old-value indent-tabs-mode))
-	   (unwind-protect
-		   (progn
-			 (setq indent-tabs-mode nil)
-			 ,@body)
-		 (setq indent-tabs-mode ,old-value)))))
+	  `(let ((,old-value indent-tabs-mode))
+	     (unwind-protect
+		       (progn
+			       (setq indent-tabs-mode nil)
+			       ,@body)
+		     (setq indent-tabs-mode ,old-value)))))
 
 (defmacro with-universal-argument (&rest body)
   "Execute BODY with the universal argument (C-u) set."

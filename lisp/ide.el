@@ -117,7 +117,7 @@
            ;; simpc-mode
            lisp-mode) . tree-sitter-hl-mode))
   :config
-  (puthash #'simpc-mode 'cpp tree-sitter-major-mode-language-table)
+  ;; (puthash #'simpc-mode 'cpp tree-sitter-major-mode-language-table)
   (setq-default treesit-language-source-alist
                 '((bash "https://github.com/tree-sitter/tree-sitter-bash")
                   (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "v0.20.3" "tsx/src"))
@@ -220,8 +220,13 @@
   :mode ("\\(\\.v?v\\|\\.vsh\\)$" . 'v-mode))
 
 (use-package odin-mode
-  :ensure '(:host github :repo "mattt-b/odin-mode")
-  )
+  :ensure '(:host github :repo "mattt-b/odin-mode"))
+
+(use-package jailess-mode
+  :after odin-mode
+  :ensure '(jailess-mode :host github :repo "hesham-cant-fly/jailess-mode")
+  :config
+  (add-hook 'odin-mode-hook #'jailess-mode))
 
 (use-package qbe-mode
   :ensure '(:host github :repo "mbknust/qbe-mode")
@@ -231,53 +236,42 @@
   :ensure '(:host github
                   :repo "tkurtbond/old-ada-mode"
                   :source "Github"
-                  :branch "main")
-  )
+                  :branch "main"))
 
 (use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
 
 (use-package elixir-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package haskell-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package wren-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package lua-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package zig-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package rust-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package go-mode
   :ensure t
-  
   :hook (go-mode . tree-sitter-hl-mode))
 
 (use-package cmake-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package d-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package typescript-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package web-mode
   :ensure t
@@ -286,18 +280,13 @@
   (setq-default web-mode-script-padding 0))
 
 (use-package nim-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package forth-mode
-  :ensure t
-  )
+  :ensure t)
 
 (use-package glsl-mode
-  :ensure t
-  )
-
-
+  :ensure t)
 
 (use-package clojure-mode
   :ensure t)

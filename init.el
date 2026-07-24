@@ -9,7 +9,6 @@
       (load-file (expand-file-name name root-path)))))
 
 (add-to-list 'custom-theme-load-path (expand-file-name "~/.emacs.d/themes/" ))
-(load-theme 'bloodvoid t)
 
 (defun config/activate-lsp ()
   (interactive)
@@ -58,6 +57,15 @@
  "app-launcher.el"
  "ui.el")
 (elpaca-wait)
+
+(load-theme 'kaolin-dark t)
+
+(add-to-list 'load-path "~/.emacs.d/site-lisp/emacs-application-framework/")
+(require 'eaf)
+(require 'eaf-browser)
+(require 'eaf-pdf-viewer)
+(require 'eaf-org-previewer)
+(require 'eaf-file-manager)
 
 (setq-default c-style-alist '(("gnu" (c-basic-offset . 2) (c-comment-only-line-offset 0 . 0)
                                (c-hanging-braces-alist (substatement-open before after)
@@ -113,7 +121,8 @@
  'haste-mode-hook
  'java-mode-hook
  'hare-mode-hook
- 'zig-mode-hook)
+ 'zig-mode-hook
+ 'odin-mode-hook)
 
 (config/hook-shit
  'simpc-mode-hook

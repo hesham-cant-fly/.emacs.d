@@ -4,7 +4,6 @@
 
 (use-package vertico
   :ensure t
-  
   :custom
   (vertico-count 15)
   (vertico-resize t)
@@ -31,7 +30,8 @@
   (vertico-posframe-height 15)
   (vertico-posframe-border-width 2)
   :config
-  (vertico-posframe-mode 1))
+  ;; (vertico-posframe-mode 1)
+  )
 
 (defun config/search-buffer ()
   "Search the current buffer using `consult-line`."

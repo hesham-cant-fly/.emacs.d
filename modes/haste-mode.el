@@ -13,7 +13,7 @@
 		   "if" "else" "do" "then" "end"
 		   "match" "case"
 		   "orelse"
-		   "in" "is" "or" "and" "not"
+		   "in" "is" "or" "and" "not" "to"
 		   "inline" "async"
 		   "try" "catch"
 		   "const_cast" "cast" "transmute"

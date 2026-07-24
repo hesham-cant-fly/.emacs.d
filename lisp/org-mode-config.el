@@ -3,7 +3,6 @@
 
 (use-package visual-fill-column
   :ensure t
-
   :custom
   (visual-fill-column-width 90)
   (visual-fill-column-center-text t)
@@ -11,7 +10,6 @@
 
 (use-package type-break
   ;; :hook (after-init . type-break-mode)
-  
   :custom
   (type-break-interval (* 30 60))
   (type-break-good-rest-interval (* 10 60))
@@ -23,26 +21,24 @@
 
 (use-package org-modern
   :ensure t
-
   :custom
   (org-modern-keyword t)
   (org-modern-todo t)
   (org-modern-priority t)
   ;; (org-modern-checkbox t)
-  (org-modern-hide-stars t)
+  ;; (org-modern-hide-stars t)
   (org-modern-star '("◉" "○" "✸" "✿" "◆" "▷"))
   (org-modern-list '((?- . "•") (?+ . "‣") (?* . "◦")))
   (org-modern-block-name t)
   (org-modern-table t)
   (org-modern-timestamp nil)
   (org-modern-variable-pitch nil)
-
   :hook
-  (org-mode . org-modern-mode)
-  (org-agenda-finalize . org-modern-agenda))
+  ;; (org-mode . org-modern-mode)
+  ;; (org-agenda-finalize . org-modern-agenda)
+  )
 
 (use-package org
-
   :custom
   (org-directory (expand-file-name "~/Documents/org/"))
   (org-src-fontify-natively t)
@@ -138,29 +134,28 @@
    '(org-upcoming-deadline ((t (:foreground "#ebbcba"))))
    '(org-agenda-structure ((t (:foreground "#908caa" :weight bold))))
    ))
-  (defun my/org-follow-link-or-return ()
+(defun my/org-follow-link-or-return ()
 	"Follow Org link in current window or execute default RET behavior."
 	(interactive)
 	(let ((context (org-element-context)))
 	  (if (and (listp context) (eq (org-element-type context) 'link))
-		  ;; Temporarily change link behavior to use current window
-		  (let ((org-link-frame-setup '((file . find-file)
-										(vm . vm-visit-folder)
-										(wl . wl-other-frame)
-										(gnus . org-gnus-no-new-news)
-										(id . org-id-open)
-										(calendar . calendar))))
-			(org-open-at-point))
-		(org-return))))                 ; Default behavior
-  
-  ;; Bind to Enter in Evil normal state for Org-mode
-  (with-eval-after-load 'org
-    (with-eval-after-load 'evil
-      (evil-define-key 'normal org-mode-map (kbd "RET") 'my/org-follow-link-or-return)))
+        ;; Temporarily change link behavior to use current window
+        (let ((org-link-frame-setup '((file . find-file)
+                                      (vm . vm-visit-folder)
+                                      (wl . wl-other-frame)
+                                      (gnus . org-gnus-no-new-news)
+                                      (id . org-id-open)
+                                      (calendar . calendar))))
+          (org-open-at-point))
+      (org-return))))                 ; Default behavior
+
+;; Bind to Enter in Evil normal state for Org-mode
+(with-eval-after-load 'org
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal org-mode-map (kbd "RET") 'my/org-follow-link-or-return)))
 
 (use-package org-appear
   :ensure t
-  
   :after org
   :hook (org-mode . org-appear-mode)
   :custom
@@ -172,64 +167,76 @@
 
 (use-package org-superstar
   :ensure t
-
   :custom
   (org-superstar-remove-leading-stars t)
   (org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "◆" "▷"))
   (org-superstar-item-bullet-alist '((?* . "•") (?+ . "‣") (?- . "◦")))
   (org-superstar-special-todo-items t)
-
-  :hook (org-mode . (lambda () (org-superstar-mode 1))))
+  :hook (org-mode . (lambda () (org-superstar-mode 1)))
+  )
 
 (use-package org-roam
   :ensure t
-  
+  :demand t
   :general
   (config/leader-def
-	:states 'normal
-	"n r"   '(:ignore t              :wk "Roam")
-	"n r f" '(org-roam-node-find     :wk "Find Node")
-	"n r r" '(org-roam-buffer-toggle :wk "Toggle Roam Buffer")
-	"n r i" '(org-roam-node-insert   :wk "Insert a Node"))
+    :states 'normal
+    "n r"   '(:ignore t              :wk "Roam")
+    "n r f" '(org-roam-node-find     :wk "Find Node")
+    "n r r" '(org-roam-buffer-toggle :wk "Toggle Roam Buffer")
+    "n r i" '(org-roam-node-insert   :wk "Insert a Node"))
   ;; custom-set-faces
   :custom
-  (org-roam-directory (file-truename (expand-file-name org-directory "roam/")))
+  (org-roam-directory (expand-file-name "roam/" org-directory))
   (org-roam-capture-templates
-   '(
-	 ("d" "Default" plain
-	 (file "~/Documents/org/roam/Templates/Default.org")
-	 :if-new
-	 (file+head "${slug}.org" "#+title: ${title}\n")
-	 :unnarrowed t)
-	 ("s" "Source" plain
-	 (file "~/Documents/org/roam/Templates/Default.org")
-	 :if-new
-	 (file+head "Source/${slug}.org" "#+title: ${title}\n")
-	 :unnarrowed t)
-	 ("l" "Linux" plain
-	 (file "~/Documents/org/roam/Templates/Default.org")
-	 :if-new
-	 (file+head "Linux/${slug}.org" "#+title: ${title}\n")
-	 :unnarrowed t)
-	 ("p" "Projects" plain
-	 (file "~/Documents/org/roam/Templates/Default.org")
-	 :if-new
-	 (file+head "Projects/${slug}.org" "#+title: ${title}\n")
-	 :unnarrowed t)
-	 ("h" "Haste Design Choices" plain
-	 (file "~/Documents/org/roam/Templates/Default.org")
-	 :if-new
-	 (file+head "LanguageDesign/${slug}.org" "#+title: ${title}\n")
-	 :unnarrowed t)
-	 ("i" "Index" plain
-	 (file "~/Documents/org/roam/Templates/Default.org")
-	 :if-new
-	 (file+head "Index/${slug}.org" "#+title: ${title}\n")
-	 :unnarrowed t)))
+   '(("d" "Default" plain
+      (file "~/Documents/org/roam/Templates/Default.org")
+      :if-new
+      (file+head "${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("s" "Resources" plain
+      (file "~/Documents/org/roam/Templates/Default.org")
+      :if-new
+      (file+head "Resources/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("c" "Computer Science" plain
+      (file "~/Documents/org/roam/Templates/Default.org")
+      :if-new
+      (file+head "ComputerScience/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("h" "Haste Design Choice" plain
+      (file "~/Documents/org/roam/Templates/Default.org")
+      :if-new
+      (file+head "LanguageDesign/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("u" "Unix" plain
+      (file "~/Documents/org/roam/Templates/Default.org")
+      :if-new
+      (file+head "Unix/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)
+     ("t" "Topic" plain
+      (file "~/Documents/org/roam/Templates/Default.org")
+      :if-new
+      (file+head "Topics/${slug}.org" "#+title: ${title}\n")
+      :unnarrowed t)))
   :config
   (org-roam-db-autosync-mode 1))
 
 (use-package org-roam-ui
   :ensure t
-  
   :after org-roam)
+
+(use-package org-download
+  :ensure t
+  :after org
+  :config
+  (defun config/setup-org-download-for-org-roam ()
+    "Set's up `org-download-image-dir' for org-roam"
+    (interactive)
+    (when (string-prefix-p (expand-file-name org-roam-directory)
+                           (expand-file-name default-directory))
+      (setq-local org-download-image-dir (expand-file-name "Figures/" org-roam-directory))))
+
+  (add-hook 'org-mode-hook #'config/setup-org-download-for-org-roam)
+  (add-hook 'dired-mode-hook 'org-download-enable))
+
